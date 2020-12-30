@@ -2,13 +2,13 @@
 title:              "Hanbum"
 description:        "master's student"
 author_name:        "Hanbum Ko" # change this to your name
-logo_url:           https://avatars0.githubusercontent.com/u/13794983?v=4 # Get it from GitHub API: https://api.github.com/users/<username>
+logo_url:           https://github.com/HanbumKo/HanbumKo.github.io/blob/master/assets/main.JPG # Get it from GitHub API: https://api.github.com/users/<username>
 
 # Site Settings
 url:                https://hanbumko.github.io # main url
 baseurl:            /
 permalink:          /:title # Post permalink
-timezone:           Asia/Kuala_Lumpur # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone:           Asia/Seoul # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 mathjax:            true  # enables support for mathjax - set to 'false' to disable
 
 # Site Build
