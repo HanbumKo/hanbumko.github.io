@@ -2,7 +2,7 @@
 title:              "Hanbum"
 description:        "master's student"
 author_name:        "Hanbum Ko" # change this to your name
-logo_url:           Get it from GitHub API: https://api.github.com/users/hanbumko # Get it from GitHub API: https://api.github.com/users/<username>
+logo_url:           https://github.com/HanbumKo/HanbumKo.github.io/blob/master/assets/main.JPG?raw=true # Get it from GitHub API: https://api.github.com/users/<username>
 
 # Site Settings
 url:                https://hanbumko.github.io # main url
