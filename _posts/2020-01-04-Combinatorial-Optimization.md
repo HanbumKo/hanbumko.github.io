@@ -104,11 +104,7 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 
 ##### MVC 
 
-helper function x,
-
-
-
-$$C\left( h(S),G \right) =-\left| S \right|$$,
+helper function x, $$C\left( h\left(S\right),G \right) =-\left| S \right|$$,
 
 $$t$$: 모든 엣지 사용 확인
 
@@ -127,10 +123,7 @@ termination x
 
 ##### TSP
 
-$$h$$ maintains tour (node orders),
-
-
-$$C\left( h(S),\quad G \right) =-\sum _{ i=1 }^{ \left| S \right| -1 }{ w\left( S(i),S(i+1) \right) -w\left( S(\left| S \right| ),S(1) \right)  } $$,
+$$h$$ maintains tour (node orders), $$C\left( h(S), G \right) =-\sum_{ i=1 }^{ \left| S \right| -1 }{ w\left( S(i),S(i+1) \right) -w\left( S(\left| S \right| ),S(1) \right)  } $$,
 
 terminate when $$S=V$$
 
