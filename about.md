@@ -4,7 +4,9 @@ title: Hanbum Ko
 
 ---
 
-I'm a master's student under the supervision of [**Prof. Sungbin Lim**](https://sites.google.com/view/sungbin/) in Learning Intelligent Machine Laboratory, UNIST AIGS. I have been fascinated making something intelligent, and currently have been studying Reinforcement Learning, Robotics.
+Master's student at UNIST AIGS.
+
+I'm studying Artificial Intelligence under the supervision of [**Prof. Sungbin Lim**](https://sites.google.com/view/sungbin/). I have been fascinated making something intelligent, and currently have been studying Reinforcement Learning, Robotics.
 
 
 
@@ -13,3 +15,4 @@ I'm a master's student under the supervision of [**Prof. Sungbin Lim**](https://
 E-mail: hanbum.ko95@gmail.com
 
 Github: [HanbumKo](https://github.com/HanbumKo)
+
