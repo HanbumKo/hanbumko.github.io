@@ -104,9 +104,9 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 
 ##### MVC 
 
-helper function x, 
+helper function x,
 
-$$C\left( h(S), G \right) = -\left| S \right|$$,
+$$C\left( h(S),G \right) =-\left| S \right|$$,
 
 $$t$$: 모든 엣지 사용 확인
 
@@ -114,7 +114,8 @@ $$t$$: 모든 엣지 사용 확인
 
 ##### MAXCUT
 
-helper function divides $$V$$ into two sets $$\left( S, \overline { S }  \right)$$ & maintains a cut-set $$C=\left\{ \left( u,v \right) |\left( u,v \right) \in E,\quad u\in S,\quad v\in \overline { S }  \right\} $$,
+helper function divides $$V$$ into two sets $$\left( S, \overline { S }  \right)$$ & maintains a cut-set
+$$C=\left\{ \left( u,v \right) |\left( u,v \right) \in E,\quad u\in S,\quad v\in \overline { S }  \right\} $$,
 
 $$c\left( h(S),G \right) =\sum _{ (u,v)\in C }^{  }{ w\left( u,v \right)  } $$,
 
