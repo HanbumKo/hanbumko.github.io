@@ -32,8 +32,6 @@ updated: 2021-01-04 21:11
 
 
 
-Given a graph optimization problem $${G}$$ and a distribution $${D}$$ of problem instances, can we learn better heuristics that generalize to unseen instances from $${D}$$?
-
 그래프 최적화문제 $${G}$$가 주어지고 데이터 분포 $${D}$$를 모를때 heuristics 보다 나은 알고리즘으로 학습할 수 있을까?
 
 
@@ -79,7 +77,7 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 
 문제들에 대해 알고리즘을 일반적으로 표현 가능
 
-1. A problem instance $${ G }\quad \~ \quad { D }$$
+1. A problem instance $${ G }$$  ~  $${ D }$$
 
 2. Partial Solution -> ordered list
 
@@ -96,13 +94,41 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 5. Greedy 알고리즘을 이용해 node $$v$$ 선택 -> $$Q(h(S), v) \in \mathbb{R}$$를 최대화 시키는 노드
    그리고 선택된 $$V^*$$를 $$S$$에 추가
 
-   $$S:=\left( S,\quad { v }^{ * } \right) ,\quad where\quad { v }^{ * }:={ argmax }_{ v\in \overline { s }  }Q\left( h(S),\quad v \right)$$
+   $$S:=\left( S, { v }^{ * } \right) ,\quad where\quad { v }^{ * }:={ argmax }_{ v\in \overline { s }  }Q\left( h(S), v \right)$$
 
 6. termination criterion $$t\left( h(S) \right)$$ 가 만족될때까지 반복
 
 모든 문제가 다른 $$h(S)$$, $$c$$, $$t$$ 들로 표현 가능
 
 
+
+##### MVC 
+
+helper function x, 
+
+$$C\left( h(S), G \right) = -\left| S \right|$$,
+
+$$t$$: 모든 엣지 사용 확인
+
+
+
+##### MAXCUT
+
+helper function divides $$V$$ into two sets $$\left( S, \overline { S }  \right)$$ & maintains a cut-set $$C=\left\{ \left( u,v \right) |\left( u,v \right) \in E,\quad u\in S,\quad v\in \overline { S }  \right\} $$,
+
+$$c\left( h(S),G \right) =\sum _{ (u,v)\in C }^{  }{ w\left( u,v \right)  } $$,
+
+termination x
+
+
+
+##### TSP
+
+$$h$$ maintains tour (node orders),
+
+$$C\left( h(S),\quad G \right) =-\sum _{ i=1 }^{ \left| S \right| -1 }{ w\left( S(i),S(i+1) \right) -w\left( S(\left| S \right| ),S(1) \right)  } $$,
+
+terminate when $$S=V$$
 
 | Problem | State                           | Action                | Helper function     | Reward               | Termination                   |
 | ------- | ------------------------------- | --------------------- | ------------------- | -------------------- | ----------------------------- |
@@ -112,7 +138,7 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 
 
 
-
+(TBA)
 
 
 
