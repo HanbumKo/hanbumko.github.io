@@ -84,15 +84,18 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 2. Partial Solution -> ordered list
 
    $$S=\left( v_{ 1 },\quad { v }_{ 2 },\quad \cdots ,\quad { v }{ \left| S \right|  } \right)$$
+
    $$\overline { S }$$ : 추가가능한 노드들, given S
+
    binary decision variables $${x}$$, $${x}_{v}=1$$ if $$v\in S$$, $$x_v=0$$ otherwise
 
 3. A maintenance procedure $$h(S)$$ -> maps $${S}$$ to constraints
 
 4. quailityt of partial solution S objective function $$C(h(s), G)$$
 
-5. Greedy 알고리즘을 이용해 node $$v$$ 선택 -> $$Q(h(S), v) \in \mathbb{R}를 최대화 시키는 노드
+5. Greedy 알고리즘을 이용해 node $$v$$ 선택 -> $$Q(h(S), v) \in \mathbb{R}$$를 최대화 시키는 노드
    그리고 선택된 $$V^*$$를 $$S$$에 추가
+
    $$S:=\left( S,\quad { v }^{ * } \right) ,\quad where\quad { v }^{ * }:={ argmax }_{ v\in \overline { s }  }Q\left( h(S),\quad v \right)$$
 
 6. termination criterion $$t\left( h(S) \right)$$ 가 만족될때까지 반복
@@ -101,9 +104,11 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 
 
 
-
-
-
+| Problem | State                           | Action                | Helper function     | Reward               | Termination                   |
+| ------- | ------------------------------- | --------------------- | ------------------- | -------------------- | ----------------------------- |
+| MVC     | subset of nodes selected so far | add node to subset    | None                | -1                   | all edges are covered         |
+| MAXCUT  | subset of nodes selected so far | add node to subset    | None                | change in cut weight | cut weight cannot be improved |
+| TSP     | partial tour                    | grow tour by one node | Insertion operation | change in tour cost  | tour includes all nodes       |
 
 
 
