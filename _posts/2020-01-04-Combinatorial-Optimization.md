@@ -138,6 +138,8 @@ terminate when $$S=V$$
 | TSP     | partial tour                    | grow tour by one node | Insertion operation | change in tour cost  | tour includes all nodes       |
 
 
+$a^2 + b^2 = c^2$
+
 
 (TBA)
 
