@@ -139,6 +139,7 @@ terminate when $$S=V$$
 
 
 
+
 ##### Representation: Graph Embedding
 
 **structure2vec** : 각 노드들은 p-dimension의 feature embedding $$\mu_v$$ 갖고있음, $$v\in V$$
@@ -180,11 +181,15 @@ $$\theta_5\in \mathbb{R}^{2\rho}$$, $$\theta _{ 6 },\theta _{ 7 }\in { R }^{ \rh
 식을 살펴보면 해당 노드의 feature + 모든 feature의 합(global feature)를 concatenation 한다.
 
 
+
+
 ##### Training: Q-learning
 
 앞에서 정의했던 $$\hat{Q}$$를 RL의 state-value function으로 간주
 
 $$\hat{Q}$$는 다른 분포, 사이즈를 갖고있는 $${ D },\; D=\left\{ G_i \right\}_{i=1}^m$$에 대해 학습함
+
+
 
 
 ##### RL formulation
@@ -207,6 +212,7 @@ $$
 $$
 
 optimal Q-function은 $$Q^\ast$$로 표기
+
 
 
 
