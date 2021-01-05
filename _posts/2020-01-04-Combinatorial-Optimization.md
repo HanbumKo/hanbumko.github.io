@@ -164,8 +164,8 @@ $$
 
 로 표현할 수 있다.
 
-$$\theta_1\in\mathbb{R}^\rho$$, 
-$$\theta_2,\theta_3\in\mathbb{R}^{\rho \times \rho }$$, 
+$$\theta_1\in\mathbb{R}^\rho \quad$$,
+$$\theta_2,\theta_3\in\mathbb{R}^{\rho \times \rho \quad }$$, 
 $$\theta_4\in\mathbb{R}^\rho$$
 
 각 파라미터는 위와 같은 차원을 갖고 차근차근(?) 따져보면 $$\mu_v^{t+1}$$는 $$\rho$$ 차원을 갖는것을 확인할 수 있다.
@@ -176,7 +176,9 @@ $$
 \hat{Q}(h(S), v;\theta) \, = \, \theta_5^Trelu([\theta_6\sum_{u\in V}{\mu_u^{(T)}},\; \theta_7\mu_v^{(T)}])
 $$
 
-$$\theta_5\in \mathbb{R}^{2\rho}$$, $$\theta _{ 6 },\theta _{ 7 }\in { R }^{ \rho \times \rho }$$, $$[\cdot , \cdot ]: Concatenation$$
+$$\theta_5\in \mathbb{R}^{2\rho} \quad$$,
+$$\theta _{ 6 },\theta _{ 7 }\in { R }^{ \rho \times \rho } \quad$$,
+$$[\cdot , \cdot ]: Concatenation$$
 
 식을 살펴보면 해당 노드의 feature + 모든 feature의 합(global feature)를 concatenation 한다.
 
