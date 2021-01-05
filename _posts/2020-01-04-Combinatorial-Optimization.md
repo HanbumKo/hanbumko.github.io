@@ -258,7 +258,7 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 ##### Algorithm
 
-![algorithm_1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/combinatorial_optimization/algorithm1.png)
+![algorithm_1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/combinatorial_optimization/algorithm1.png?raw=true)
 
 
 
