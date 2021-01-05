@@ -271,4 +271,4 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 
 
-[^1]: [https://arxiv.org/abs/1704.01665](
+[^1]: [https://arxiv.org/abs/1704.01665]
