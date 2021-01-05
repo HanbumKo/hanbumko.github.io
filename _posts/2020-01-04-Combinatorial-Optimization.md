@@ -8,8 +8,10 @@ updated: 2021-01-04 21:11
 
 ## Paper list
 
-* Learning Combinatorial Optimization Algorithms over Graphs [^1]
+* [Learning Combinatorial Optimization Algorithms over Graphs](#learning-combinatorial-optimization-algorithms-over-graphs) [^1]
 
+
+<div class="divider"></div>
 
 
 # Learning Combinatorial Optimization Algorithms over Graphs
@@ -138,14 +140,10 @@ terminate when $$S=V$$
 | TSP     | partial tour                    | grow tour by one node | Insertion operation | change in tour cost  | tour includes all nodes       |
 
 
-$a^2 + b^2 = c^2$
-
-
-(TBA)
 
 
 
-
+<div class="divider"></div>
 
 
 
@@ -154,4 +152,5 @@ $a^2 + b^2 = c^2$
 
 
 [^1]: [https://arxiv.org/abs/1704.01665](https://arxiv.org/abs/1704.01665)
+
 
