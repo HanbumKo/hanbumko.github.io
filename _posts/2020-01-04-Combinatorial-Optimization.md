@@ -45,7 +45,7 @@ updated: 2021-01-04 21:11
 * Algorithm representation
   - 그래프 임베딩으로 **structure2vec**을 사용
 * Algorithm training
-  - Fitted Q-learning 사용 (delayed reward 고려)
+  - n-step Q-learning, Fitted Q-iteration 사용 (delayed reward 고려)
 
 
 
@@ -137,12 +137,113 @@ $$
 
 terminate when $$S=V$$
 
+
+
+##### Representation: Graph Embedding
+
+**structure2vec** : 각 노드들은 p-dimension의 feature embedding $$\mu_v$$ 갖고있음, $$v\inV$$
+
+$$
+\mu_v^{t+1}\quad\leftarrow \quad F(x_v, \; \left\{\mu_u^{(t)} \right\}_{u\in N(v)}, \;  \left\{ w(v,u)\right\}_{u\in N(v)}  ; \theta )
+$$
+
+$$F$$: generic non-linear mapping(NN, kernel function)
+
+$$N(v)$$: set of neighbors
+
+-> 이웃 노드들의 feature, weight를 이용해 새로운 $$\mu_v^{t+1}$$ 생성
+
+-> 위 연산을 $$T$$번 반복하면 T-hop의 정보를 얻는 것으로 생각할 수 있음 (usually $$T=4$$)
+
+뉴럴넷 이용해 다시 적어보면, 위 식은
+
+$$
+relu(\theta _{ 1 }x_{ v }\, +\, \theta _{ 2 }\sum _{ u\in N(v) } \mu_u^{(t)} \, + \, \theta_3\sum_{u\in N(v)}{relu(\theta_4w(v,u))}  )
+$$
+
+로 표현할 수 있다.
+
+$$\theta_1\in\mathbb{R}^\rho$$, 
+$$\theta_2,\theta_3\in\mathbb{R}^{\rho \times \rho }$$, 
+$$\theta_4\in\mathbb{R}^\rho$$
+
+각 파라미터는 위와 같은 차원을 갖고 차근차근(?) 따져보면 $$\mu_v^{t+1}$$는 $$\rho$$ 차원을 갖는것을 확인할 수 있다.
+
+위 연산은 각 노드들의 feature를 구하는 과정이고 이 구해진 feature들을 이용해 estimated Q 또한 뉴럴넷 이용해 구한다.
+
+$$
+\hat{Q}(h(S), v;\theta) \, = \, \theta_5^Trelu([\theta_6\sum_{u\in V}{\mu_u^{(T)}},\; \theta_7\mu_v^{(T)}])
+$$
+
+$$\theta_5\in \mathbb{R}^{2\rho}$$, $$\theta _{ 6 },\theta _{ 7 }\in { R }^{ \rho \times \rho }$$, $$[\cdot , \cdot ]: Concatenation$$
+
+식을 살펴보면 해당 노드의 feature + 모든 feature의 합(global feature)를 concatenation 한다.
+
+
+##### Training: Q-learning
+
+앞에서 정의했던 $$\hat{Q}$$를 RL의 state-value function으로 간주
+
+$$\hat{Q}$$는 다른 분포, 사이즈를 갖고있는 $${ D },\; D=\left\{ G_i \right\}_{i=1}^m$$에 대해 학습함
+
+
+##### RL formulation
+
+1. States: \sum_{v\in V}{\mu_v}
+2. Transition: deterministic (MDP세팅)
+3. Actions: a node of G not in S
+4. Rewards:
+$$
+r(s,v) = c(h(S^\prime), G) - c(h(S), G) \\
+c(h(\phi), G)=0
+$$
+-> 새로운 state에서의 cost는 커져야 하고 현재의 state에서의 cost는 작아야 함
+
+-> 현재 cost가 작게 되도록 선택해야 함
+
+5. Policy: greedy policy
+$$
+\pi(v \mid s) := argmax_{j\in \bar S}\hat{Q}(h(S), v^\prime)
+$$
+
+optimal Q-function은 $$Q^\ast$$로 표기
+
+
+
 | Problem | State                           | Action                | Helper function     | Reward               | Termination                   |
 | ------- | ------------------------------- | --------------------- | ------------------- | -------------------- | ----------------------------- |
 | MVC     | subset of nodes selected so far | add node to subset    | None                | -1                   | all edges are covered         |
 | MAXCUT  | subset of nodes selected so far | add node to subset    | None                | change in cut weight | cut weight cannot be improved |
 | TSP     | partial tour                    | grow tour by one node | Insertion operation | change in tour cost  | tour includes all nodes       |
 
+
+
+
+##### Learning algorithm
+
+n-step Q-learning, fitted Q-iteration
+
+노드를 다 추가하면 한 에피소드가 끝난것으로 간주,
+
+하나의 노드를 선택하는 것을 1-step 이라고 표현
+
+
+
+1-step Q-learning은 매 스텝마다 업데이트
+n-step Q-learning은 n 스텝마다 업데이트 (for delayed reward)
+$$
+y=\sum_{i=0}^{n-1}{r(s_{t+i}, \, v_{t+i}) + \gamma max_{v^{\prime}} \hat{Q}(h(S_{t+n}), v^{\prime};\theta ) }
+$$
+
+
+
+fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트 하는것
+
+
+
+##### Algorithm 1
+
+(페이퍼 참고)
 
 
 
