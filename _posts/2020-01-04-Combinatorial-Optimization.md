@@ -141,7 +141,7 @@ terminate when $$S=V$$
 
 ##### Representation: Graph Embedding
 
-**structure2vec** : 각 노드들은 p-dimension의 feature embedding $$\mu_v$$ 갖고있음, $$v\inV$$
+**structure2vec** : 각 노드들은 p-dimension의 feature embedding $$\mu_v$$ 갖고있음, $$v\in V$$
 
 $$
 \mu_v^{t+1}\quad\leftarrow \quad F(x_v, \; \left\{\mu_u^{(t)} \right\}_{u\in N(v)}, \;  \left\{ w(v,u)\right\}_{u\in N(v)}  ; \theta )
