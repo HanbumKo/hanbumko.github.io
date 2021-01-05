@@ -181,7 +181,7 @@ $$\theta_5\in \mathbb{R}^{2\rho} \quad$$,
 $$\theta _{ 6 },\theta _{ 7 }\in { R }^{ \rho \times \rho } \quad$$,
 $$[\cdot , \cdot ]: Concatenation$$
 
-식을 살펴보면 해당 노드의 feature + 모든 feature의 합(global feature)를 concatenation 한다.
+-> 해당 노드의 feature + 모든 feature의 합(global feature)를 concatenation 한다.
 
 
 
