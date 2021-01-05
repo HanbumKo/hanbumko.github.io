@@ -2,6 +2,7 @@
 title: Combinatorial Optimization
 updated: 2021-01-04 21:11
 
+
 ---
 
 
@@ -196,13 +197,14 @@ $$\hat{Q}$$는 다른 분포, 사이즈를 갖고있는 $${ D },\; D=\left\{ G_i
 
 ##### RL formulation
 
-1. States: $$\sum_{v\in V}{\mu_v}$$
+- States: $$\sum_{v\in V}{\mu_v}$$
 
-2. Transition: deterministic (MDP세팅)
+- Transition: deterministic (MDP세팅)
 
-3. Actions: a node of G not in S
+- Actions: a node of G not in S
 
-4. Rewards:
+- Rewards:
+
 $$
 r(s,v) = c(h(S^\prime), G) - c(h(S), G) \\
 c(h(\phi), G)=0
@@ -211,7 +213,8 @@ $$
   -> 새로운 state에서의 cost는 커져야 하고 현재의 state에서의 cost는 작아야 함
   -> 현재 cost가 작게 되도록 선택해야 함
 
-5. Policy: greedy policy
+- Policy: greedy policy
+
 $$
 \pi(v \mid s) := argmax_{j\in \bar S}\hat{Q}(h(S), v^\prime)
 $$
@@ -268,5 +271,4 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 
 [^1]: [https://arxiv.org/abs/1704.01665](https://arxiv.org/abs/1704.01665)
-
 
