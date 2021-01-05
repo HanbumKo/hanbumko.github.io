@@ -196,17 +196,20 @@ $$\hat{Q}$$는 다른 분포, 사이즈를 갖고있는 $${ D },\; D=\left\{ G_i
 
 ##### RL formulation
 
-1. States: \sum_{v\in V}{\mu_v}
+1. States: $$\sum_{v\in V}{\mu_v}$$
+
 2. Transition: deterministic (MDP세팅)
+
 3. Actions: a node of G not in S
+
 4. Rewards:
 $$
 r(s,v) = c(h(S^\prime), G) - c(h(S), G) \\
 c(h(\phi), G)=0
 $$
--> 새로운 state에서의 cost는 커져야 하고 현재의 state에서의 cost는 작아야 함
 
--> 현재 cost가 작게 되도록 선택해야 함
+  -> 새로운 state에서의 cost는 커져야 하고 현재의 state에서의 cost는 작아야 함
+  -> 현재 cost가 작게 되도록 선택해야 함
 
 5. Policy: greedy policy
 $$
