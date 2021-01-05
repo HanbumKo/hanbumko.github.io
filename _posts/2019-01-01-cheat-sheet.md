@@ -1,138 +1,210 @@
 ---
-title: Cheat Sheet
-updated: 2019-01-01 23:37
----
-
-**NOTE:** This markdown cheatsheet is a typography demo for this theme. Check out this post to learn more about this markdown usage when you want to get started with this theme. Enjoy!
-
-## Typography Elements in One
-
-Let's start with a informative paragraph. **This text is bolded.** But not this one! _How about italic text?_ Cool right? Ok, let's **_combine_** them together. Yeah, that's right! I have code to highlight, so `ThisIsMyCode()`. What a nice! Good people will hyperlink away, so [here we go](#) or [http://www.example.com](http://www.example.com).
-
-<div class="divider"></div>
-
-## Headings H1 to H6
-
-# H1 Heading
-
-## H2 Heading
-
-### H3 Heading
-
-#### H4 Heading
-
-##### H5 Heading
-
-###### H6 Heading
-
-<div class="divider"></div>
-
-## Footnote
-
-Let's say you have text that you want to refer with a footnote, you can do that too! This is an example for the footnote number one [^1]. You can even add more footnotes, with link! [^2]
-
-<div class="divider"></div>
-
-## Blockquote
-
-> Start by doing what's necessary; then do what's possible; and suddenly you are doing the impossible. --Francis of Assisi
-
-**NOTE:** This theme does NOT support nested blockquotes.
-
-<div class="divider"></div>
-
-## List Items
-
-1. First order list item
-2. Second item
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
-
-<div class="divider"></div>
-
-## Code Blocks
-
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
-
-```python
-s = "Python syntax highlighting"
-print s
-```
-
-```
-No language indicated, so no syntax highlighting.
-But let's throw in a <b>tag</b>.
-```
-
-<div class="divider"></div>
-
-## Mathematics
-
-The theme comes ready with [mathjax](https://www.mathjax.org/) support built in, allowing for both simple inline equations like $$ax^2 + bx + c = 0$$ and much more complex mathematical expressions such as equation $$\eqref{eq:sample}$$ below.
-
-$$
-\begin{align}
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t}  &= \frac{4\pi}{c}\vec{\mathbf{j}} \\   
-\nabla \cdot \vec{\mathbf{E}} &= 4 \pi \rho \tag{2} \label{eq:sample}\\
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t}  &= \vec{\mathbf{0}} \\
-\nabla \cdot \vec{\mathbf{B}}  &= 0\\
-\end{align}
-$$
-
-<div class="divider"></div>
-
-
-## Table
-
-### Table 1: With Alignment
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-### Table 2: With Typography Elements
-
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
-
-<div class="divider"></div>
-
-## Horizontal Line
-
-The HTML `<hr>` element is for creating a "thematic break" between paragraph-level elements. In markdown, you can create a `<hr>` with any of the following:
-
-* `___`: three consecutive underscores
-* `---`: three consecutive dashes
-* `***`: three consecutive asterisks
-
-renders to:
-
-___
+title: Robotics
+updated: 2021-01-04 22:29
 
 ---
 
-***
+
+
+## Paper list
+
+* DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills [^1]
 
 <div class="divider"></div>
 
-## Media
+# DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills
 
-### YouTube Embedded Iframe
+reference 움직임들을 이용해 강화학습 덧붙여 자연스러운 동작 + reference 동작과 goal(task)가 주어질 때 주어진 goal을 해결하는 것이 목표
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/n1a7o44WxNo" frameborder="0" allowfullscreen></iframe>
+1. training with a multi-clip reward based on a max operator
+2. training a policy to perform multiple diverse skills that can be triggered by the user
+3. sequencing multiple sigle-clip policies by using their value functions to evaluate the feasibility of transitions.
 
-### Image
 
-![Minion](http://octodex.github.com/images/minion.png)
 
-[^1]: Footnote number one yeah baby! Long sentence test of footnote to see how the words are wrapping between each other. Might overflowww!
-[^2]: A footnote you can link to - [click here!](#)
+## Approaches
+
+* Kinetic Models
+  - 많은 데이터 있을때 효과적
+  - latent representation 위해 gaussian process, autoencoer 사용
+  - 문제가 복잡하면 잘 동작하지 않음.
+
+* Physics-based Models
+  - 사람의 직관에 의존
+  - GAIL (paper link TBA)
+  - (TBA)
+
+* RL
+  - 학습된 모습이 사람이 보기에 자연스럽지 못함
+  - (TBA)
+
+* Motion Imitation
+  - (TBA)
+
+
+
+reference 움직임은 목표 동작의 연속 
+$$
+\left\{ { \hat { q }  }_{ t } \right\}
+$$
+로 표현
+
+control policy는 
+$$
+\pi(a_t|s_t,g_t)
+$$
+로 표현
+
+$$a_t$$는 관절들의 토크들 계산에 이용됨 -> PD(proportional-derivative) 컨트롤러의 target angle
+
+뉴럴넷 사용하였고 PPO알고리즘으로 학습
+$$
+\left\{ { \hat { q }  }_{ t } \right\}
+$$
+(reference motion)은 kinetic information을 제공함
+
+
+
+#### State $$S$$
+각 연결부위의 위치, 각도(quaternions)
+
+Linear & angular 속도
+
+Phase variable $$\phi$$
+
+Phase variable
+$$
+\phi \in \left[ 0,1 \right]
+$$
+
+
+: $$\phi=0$$는 움직임의 시작, $$\phi=1$$은 끝을 나타낸다. 매 사이클마다 0로 초기화 한다.
+
+
+
+#### Model
+
+Action network: fully-connected (input -> 1024 -> 512 -> output)
+
+Value network: fully-connected (1024 -> 512 -> 1)
+
+vision-based task같은 경우에 주어지는 heightmap $$H$$ 는 convolutional 통과시킴 (H -> 8x8 -> 4x4 -> 4x4 -> 64 -> concatenation)
+
+
+
+#### Reward
+
+$$
+r_{t}=w^{I}r_t^{I}+w^{G} r_t^{G}
+$$
+
+
+
+$$w^I$$: imitation weight
+
+$$r_t^{I}$$: imitation reward
+
+$$w^G$$: goal weight
+
+$$r_t^{G}$$: goal reward
+
+
+$$
+r_t^I = w^pr_t^p + w^vr_t^v + w^er_t^e + w^cr_t^c
+$$
+
+
+$$w^p$$: 0.65
+
+$$r_t^p$$: pose reward -> 관절 방향 차이(quaternion)
+
+$$w^v$$: 0.1
+
+$$r_t^v$$: velocity reward -> 관절 속도 차이(quaternion)
+
+$$w^e$$: 0.15
+
+$$r_t^e$$: end-effector reward -> 왼발 오른발 왼손 오른손 위치차이(meter)
+
+$$w^c$$: 0.1
+
+$$r_t^c$$: penalize center of mass
+
+
+$$
+{ r }_{ t }^{ p }=exp\left[ -2\left( \sum _{ j }^{  }{ \left\| { \hat { q }  }_{ t }^{ j }\circleddash { q }_{ t }^{ j } \right\|^2  }  \right)  \right]
+$$
+
+$$
+{ r }_{ t }^{ v }=exp\left[ -0.1\left( \sum _{ j }^{  }{ \left\| { \hat { \dot { q }  }  }_{ t }^{ j }- { \dot { q }  }_{ t }^{ j } \right\| ^{ 2 } }  \right)  \right]
+$$
+
+$$
+{ r }_{ t }^{ e }=exp\left[ -40\left( \sum _{ e }^{  }{ \left\| { \hat { p }  }_{ t }^{ e }-{ p }_{ t }^{ e } \right\| ^{ 2 } }  \right)  \right]
+$$
+
+$$
+e\in[왼발, 오른발, 왼손, 오른손]
+$$
+
+
+$$
+{ r }_{ t }^{ c }=exp\left[ -10\left( \left\| { \hat { p }  }_{ t }^{ c }-{ p }_{ t }^{ c } \right\| ^{ 2 } \right)  \right]
+$$
+
+
+$$\circleddash$$: quaternion differences
+
+$$\left\| x \right\| $$: scalar rotation
+
+
+
+PPO using the clipped surrogate objective
+
+policy network $$\pi_\theta({a}|{s,g})$$
+
+value function $$V_\psi(s,g)$$
+
+episodic
+
+initial state $$s_0$$ is sampled uniformly from reference motion (-> RSI: Reference State Initialization)
+
+episode의 termination은 time limit이나 특정한 조건 만족되면 끝나도록 (-> ET: Early Termination) 해주었음. Early Termination을 통해 트레이닝에 중요한 것만 학습에 이용할 수 있다.
+
+#### Multi-Skill Integration
+1. 하나의 reference clip 뿐만 아니라 여러개 동시에 고려
+2. 사용자가 reference clip 선택하게 할 수 있음(one-hot vector로 제공)
+3. 각 reference clip 학습을 따로 하는것이 아니라 한번에
+
+#### Multi-Clip Reward
+$$
+r_t^I = \underset { j=1,\cdots ,k }{ max } r_t^j
+$$
+(k 개의 motion)
+
+한 개의 policy에 다 학습시키는 방법도 있지만 따로따로 학습시키고 적절한 policy를 선택하는 것도 생각해볼 수 있다. 이 경우에 value function이 일종의 estimator 역할을 한다.
+
+$$
+\pi (a|s)=\sum _{ i=1 }^{ k }{ p^{ i }(s)\pi ^{ i }(a|s) } ,\quad p^{ i }(s)=\frac { exp[V^{ i }(s)/\tau] }{ \sum _{ j=1 }^{ k }{ exp[V^{ j }(s)/\tau] }  }
+$$
+($$\tau$$: Temperature Parameter)
+
+각 task와 goal마다 reward 세팅이 조금씩 다름(페이퍼 참고)
+
+
+<div class="divider"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[^1]: [https://arxiv.org/abs/1804.02717](https://arxiv.org/abs/1804.02717)
