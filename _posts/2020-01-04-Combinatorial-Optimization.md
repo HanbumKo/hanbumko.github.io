@@ -3,6 +3,7 @@ title: Combinatorial Optimization
 updated: 2021-01-04 21:11
 
 
+
 ---
 
 
@@ -97,7 +98,7 @@ $$w(u,v)$$ , $$\left( u,v \right) \in E$$
 5. Greedy 알고리즘을 이용해 node $$v$$ 선택 -> $$Q(h(S), v) \in \mathbb{R}$$를 최대화 시키는 노드
    그리고 선택된 $$V^*$$를 $$S$$에 추가
 
-   $$S:=\left( S, { v }^{ * } \right) ,\quad where\quad { v }^{ * }:={ argmax }_{ v\in \overline { s }  }Q\left( h(S), v \right)$$
+   $$S:=\left( S, { v }^{ * } \right) ,\quad where\quad { v }^{ * }:=\underset { v\in \bar S }{ argmax }Q\left( h(S), v \right)$$
 
 6. termination criterion $$t\left( h(S) \right)$$ 가 만족될때까지 반복
 
@@ -216,7 +217,7 @@ $$
 - Policy: greedy policy
 
 $$
-\pi(v \mid s) := argmax_{j\in \bar S}\hat{Q}(h(S), v^\prime)
+\pi(v \mid s) := \underset { j\in \bar S }{ argmax }\hat{Q}(h(S), v^\prime)
 $$
 
 optimal Q-function은 $$Q^\ast$$로 표기
@@ -270,5 +271,4 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 
 
-[^1]: [https://arxiv.org/abs/1704.01665](https://arxiv.org/abs/1704.01665)
-
+[^1]: [https://arxiv.org/abs/1704.01665](
