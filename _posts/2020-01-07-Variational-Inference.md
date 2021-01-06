@@ -45,7 +45,7 @@ true distribution은 $$p^\ast (\mathbf{x})$$로 표기한다.
 we attempt to approximate this underlying process with a chosen model $$p_\theta (\mathbf{x})$$, with parameter $$\theta$$
 
 $$
-\mathbf{x} \quad \sim \quad p_\theta (\mathbf{x}) \tag{1.1} \label{eq:1_1}
+\mathbf{x} \quad \sim \quad p_\theta (\mathbf{x}) \tag{1.1} \label{eq:1.1}
 $$
 
 
@@ -54,7 +54,7 @@ $$
 이 true distribution $$p^\ast (\mathbf{x})$$의 파라미터를 추론하는 과정을 **Learning**이라 한다.
 
 $$
-p_\theta (\mathbf{x}) \approx p^\ast (\mathbf{x}) \tag{1.2} \label{eq:1_2}
+p_\theta (\mathbf{x}) \approx p^\ast (\mathbf{x}) \tag{1.2} \label{eq:1.2}
 $$
 
 $$p_\theta (\mathbf{x})$$는 충분히 flexible 하고 충분히 정확하게 모델링 될 수 있어야 한다.
@@ -75,11 +75,14 @@ $$\mathbf{x}$$를 model의 **input**이라 한다.
 
 $$
 \begin{align}
-p_\theta(\mathbf{y} \mid \mathbf{x}) \approx p^\ast (\mathbf{y} \mid \mathbf{x}) \tag{1.3} \label{eq:1_3}
+p_\theta(\mathbf{y} \mid \mathbf{x}) \approx p^\ast (\mathbf{y} \mid \mathbf{x}) \tag{1.3} \label{eq:1.3}
 \end{align}
 $$
 
-$$\eqref{eq:1_1}$$, $$\eqref{eq:1_2}$$, $$\eqref{eq:1_3}$$
+예시
+
+
+$$\eqref{eq:1.1}$$, $$\eqref{eq:1.2}$$, $$\eqref{eq:1_3}$$
 
 
 
