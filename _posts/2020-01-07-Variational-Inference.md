@@ -25,17 +25,21 @@ $$
 
 관심있는 변수들의 벡터를 lower case $$\mathbf{x}$$로 나타낸다.
 
+<br>
 
-
-관측된 x는 알려지지 않은 process (unknown underlying process)에 의하여 random sample 된것이라 가정한다.
+관측된 $$\mathbf{x}$$는 알려지지 않은 process (unknown underlying process)에 의하여 random sample 된것이라 가정한다.
 
 true distribution은 $$p^\ast (\mathbf{x})$$로 표기한다.
+
+<br>
 
 we attempt to approximate this underlying process with a chosen model $$p_\theta (\mathbf{x})$$, with parameter $$\theta$$
 
 $$
 \mathbf{x} \quad \sim \quad p_\theta (\mathbf{x})
 $$
+
+<br>
 
 이 true distribution $$p^\ast (\mathbf{x})$$의 파라미터를 추론하는 과정을 **Learning**이라 한다.
 
@@ -44,6 +48,7 @@ p_\theta (\mathbf{x}) \approx p^\ast (\mathbf{x})
 $$
 
 $$p_\theta (\mathbf{x})$$는 충분히 flexible 하고 충분히 정확하게 모델링 될 수 있어야 한다.
+
 
 
 
