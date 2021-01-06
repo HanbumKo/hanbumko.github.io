@@ -98,11 +98,11 @@ NN은 flexible하게 모델링 하는 방법 중 하나이다. Stochastic Gradie
 deep neural network를 간단히 $$NeuralNet(\cdot)$$로 표기한다.
 
 image classification의 경우 다음과 같이 나타낼 수 있다.
+
 $$
 \begin{align}
 \mathbf{p} &= NeuralNet(\mathbf{x}) \tag{1.4} \label{eq:1_4} \\
 p_\theta(\mathbf{y} \mid \mathbf{x}) &= Categorical(\mathbf{y} ; \mathbf{p}) \tag{1.5} \label{eq:1_5}
-
 \end{align}
 $$
 
