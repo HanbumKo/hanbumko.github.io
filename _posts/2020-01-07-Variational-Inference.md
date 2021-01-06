@@ -45,16 +45,15 @@ true distribution은 $$p^\ast (\mathbf{x})$$로 표기한다.
 we attempt to approximate this underlying process with a chosen model $$p_\theta (\mathbf{x})$$, with parameter $$\theta$$
 
 $$
-\mathbf{x} \quad \sim \quad p_\theta (\mathbf{x}) \tag{1.1} \label{eq:1.1}
+\mathbf{x} \quad \sim \quad p_\theta (\mathbf{x}) \tag{1.1} \label{eq:1_1}
 $$
-
 
 <br>
 
 이 true distribution $$p^\ast (\mathbf{x})$$의 파라미터를 추론하는 과정을 **Learning**이라 한다.
 
 $$
-p_\theta (\mathbf{x}) \approx p^\ast (\mathbf{x}) \tag{1.2} \label{eq:1.2}
+p_\theta (\mathbf{x}) \approx p^\ast (\mathbf{x}) \tag{1_2} \label{eq:1.2}
 $$
 
 $$p_\theta (\mathbf{x})$$는 충분히 flexible 하고 충분히 정확하게 모델링 될 수 있어야 한다.
@@ -75,15 +74,37 @@ $$\mathbf{x}$$를 model의 **input**이라 한다.
 
 $$
 \begin{align}
-p_\theta(\mathbf{y} \mid \mathbf{x}) \approx p^\ast (\mathbf{y} \mid \mathbf{x}) \tag{1.3} \label{eq:1.3}
+p_\theta(\mathbf{y} \mid \mathbf{x}) \approx p^\ast (\mathbf{y} \mid \mathbf{x}) \tag{1.3} \label{eq:1_3}
 \end{align}
 $$
 
-예시
+예시)
+
+* image classification
+  * $$\mathbf{x}$$: an image
+  * $$\mathbf{y}$$: image's class
+
+<br>
+
+notation의 간결성을 위해 대부분 unconditional 이라고 가정하지만 conditional의 경우도 가능하다
 
 
-$$\eqref{eq:1.1}$$, $$\eqref{eq:1.2}$$, $$\eqref{eq:1_3}$$
+### Parameterizing Conditional Distributions with Neural Networks
 
+neural networks(NN)를 conditional probability density를 계산하는 함수라고 볼 수 있다.
+
+NN은 flexible하게 모델링 하는 방법 중 하나이다. Stochastic Gradient Descent(SGD)를 통해 효과적으로 최적화 될 수 있다.
+
+deep neural network를 간단히 $$NeuralNet(\cdot)$$로 표기한다.
+
+image classification의 경우 다음과 같이 나타낼 수 있다.
+$$
+\begin{align}
+\mathbf{p} &= NeuralNet(\mathbf{x}) \tag{1.4} \label{eq:1_4} \\
+p_\theta(\mathbf{y} \mid \mathbf{x}) &= Categorical(\mathbf{y} ; \mathbf{p}) \tag{1.5} \label{eq:1_5}
+
+\end{align}
+$$
 
 
 
