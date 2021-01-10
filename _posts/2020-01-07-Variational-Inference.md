@@ -7,7 +7,7 @@ updated: 2021-01-10 18:21
 
 # Variational Inference
 
-랩 내의 스터디중 하나에서 [Kingma](http://www.dpkingma.com/)의 Thesis를 공부하고 있는데, 정리도 할겸 복습용으로 작성중인 글입니다. [Full Thesis](https://pure.uva.nl/ws/files/17891313/Thesis.pdf)
+랩 내의 스터디중 하나에서 [Kingma](http://www.dpkingma.com/)의 Thesis를 공부하고 있는데, 정리도 할겸 복습용으로 작성중인 글입니다. [Full Thesis](https://pure.uva.nl/ws/files/17891313/Thesis.pdf) 연구 결과를 공개해준 Kingma에게 감사합니다.
 
 ##### contents
 1. [Introduction and Background](#introduction-and-background)
@@ -121,7 +121,7 @@ $$
 
 $$p_a(\mathbf{x}_j)$$: node $$\mathbf{x}_j$$의 parent variable. root node일 경우는 unconditional로 쓴다.
 
-directed graphical models 혹은 Bayesian networks라고 한다.
+*directed graphical models* 혹은 *Bayesian networks*라고 한다.
 
 $${p_\theta(\mathbf{x}_j \mid p_a(\mathbf{x}_j))} $$는 lookup table 혹은 linear model로 parameterized 될 수 있으며 뉴럴넷은 조금 더 flexible한 방법이다.
 
@@ -151,7 +151,7 @@ $$
 
 probabilistic models의 가장 흔한 평가기준(criterion)은 maximum log-likelihood(ML)이다.
 
-log-likelihood criterion을 최대화 하는 것은 Kullback-Leibler divergence를 최소화 하는 것과 같다. (data와 model distribution)
+log-likelihood criterion을 최대화 하는 것은 data와 model distribution 사이의 Kullback-Leibler divergence를 최소화 하는 것과 같다.
 
 ML criterion을 이용해 log-probabilities의 합 혹은 평균을 최대화하는 파라미터 $$\theta$$를 찾는다.
 
@@ -165,7 +165,7 @@ $$\nabla_\theta \log{p_\theta(\mathcal{D})}$$: batch gradient
 
 -> 데이터 사이즈 $$N_\mathcal{D}$$이 증가함에 따라 시간도 linear 하게 증가
 
-Stochastic Gradient Descent (SGD)
+*Stochastic Gradient Descent (SGD)*
 
 -> $$\mathcal{D}$$에서 랜덤하게 미니배치 뽑아서 하는 것
 
@@ -205,17 +205,17 @@ $$
 p_\theta(\mathbf{x}) = \int{p_\theta(\mathbf{x}, \mathbf{z})}d\mathbf{z} \tag{1.13} \label{eq:1_13}
 $$
 
-(single datapoint) marginal likelihood 혹은 model evidence라고 부른다.
+*(single datapoint) marginal likelihood* 혹은 *model evidence*라고 부른다.
 
-만약 $$\mathbf{z}$$가 discrete이고 $$p_\theta(\mathbf{x} \mid \mathbf{z}) \; \sim \mathcal{N}$$이면 $$q_\phi(\mathbf{z} \mid \mathbf{x})는 mixture-of-Gaussian-distribution이다.
+만약 $$\mathbf{z}$$가 discrete이고 $$p_\theta(\mathbf{x} \mid \mathbf{z}) \; \sim \mathcal{N}$$이면 $$q_\phi(\mathbf{z} \mid \mathbf{x})$$는 mixture-of-Gaussian-distribution이다.
 
 continuous한 $$\mathbf{z}$$의 경우에는 $$p_\theta(\mathbf{x})$$가 infinite mixture라고 볼 수 있다.
 
-이러한 marginal distributions를 compound probability distributions 라고도 부른다.
+이러한 marginal distributions를 *compound probability distributions* 라고도 부른다.
 
 #### Deep Latent Variable Models
 
-latent variable model $$p_\theta(\mathbf{x}, \mathbf{z})$$를 뉴럴넷으로 parameterize한 경우를 deep latent variable model(DLVM)이라고 (사용)한다.
+latent variable model $$p_\theta(\mathbf{x}, \mathbf{z})$$를 뉴럴넷으로 parameterize한 경우를 *deep latent variable model(DLVM)*이라고 (사용)한다.
 
 $$p_\theta(\mathbf{x}, \mathbf{z} \mid \mathbf{y})$$ 같이 conditioned로도 표현 가능하다.
 
@@ -227,7 +227,7 @@ $$
 
 $$p_\theta(\mathbf{z})$$ and/or $$p_\theta(\mathbf{x} \mid \mathbf{z})$$는 정해져 있다.
 
-$$p(\mathbf{z})$$를 보통 $$\mathbf{z}$$에 대한 prior distribution이라 한다. (어떠한 observations에도 conditioned 되지 않았기 때문에)
+$$p(\mathbf{z})$$를 보통 $$\mathbf{z}$$에 대한 *prior distribution*이라 한다. (어떠한 observations에도 conditioned 되지 않았기 때문에)
 
 #### Example DLVM for multivariate Bernoulli data
 
@@ -245,6 +245,7 @@ $$
 where $$\forall p_j \in \mathbf{p} \; : \; 0 \le p_j \le 1$$
 
 , D is dimensionality of $$\mathbf{x}$$
+
 , $$Bernoulli(. ; p)$$ is p.m.f. of Bernoulli distribution
 
 <br>
@@ -265,7 +266,7 @@ $$p_\theta(\mathbf{x}, \mathbf{z})$$는 tractable 할 때,
 
 $$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf{x})$$도 tractable 하다.(vice-versa)
 
-마찬가지로 뉴럴넷의 파라미터에 대한 posterior $$p(\theta \mid \mathcal{D})도 정확하게 계산되기 힘들고 approximate 추정 방법이 필요하다.
+마찬가지로 뉴럴넷의 파라미터에 대한 posterior $$p(\theta \mid \mathcal{D})$$도 정확하게 계산되기 힘들고 approximate 추정 방법이 필요하다.
 
 <br>
 
@@ -273,7 +274,7 @@ $$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf
 
 **Research Question 1:** 큰 데이터셋이 존재할때, DLVMs에서 어떻게 효과적으로 posterior 추정과 ML 추정을 할 것인지?
 
--> chapter 2에서 *reparameterization trick* 과 함께 다룬다.* variational autoencoder*(VAE)이 뉴럴넷을 이용한 추정 모델과 뉴럴넷 이용한 generative model을 조합해서 사용한다. 이 두 네트워크의 joint optimization하는 간단한 방법을 다룬다.
+-> chapter 2에서 *reparameterization trick* 과 함께 다룬다. *variational autoencoder*(VAE)이 뉴럴넷을 이용한 추정 모델과 뉴럴넷 이용한 generative model을 조합해서 사용한다. 이 두 네트워크의 joint optimization하는 간단한 방법을 다룬다.
 
 **Research Question 2:** VAE를 사용해서 최신의 semi-supervised classification 결과들을 개선시킬 수 있을지?
 
@@ -290,5 +291,4 @@ $$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf
 **Research Question 5:** 현재 존재하는 stochastic gradient-based 최적화 방법들을 개선 시킬 수 있는지?
 
 -> chapter 7에서 *Adam*을 소개한다.
-
 
