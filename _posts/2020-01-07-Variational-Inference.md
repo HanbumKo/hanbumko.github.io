@@ -7,7 +7,9 @@ updated: 2021-01-10 18:21
 
 # Variational Inference
 
-랩 내의 스터디중 하나에서 [Kingma](http://www.dpkingma.com/)의 Thesis를 공부하고 있는데, 정리도 할겸 복습용으로 작성중인 글입니다. [Full Thesis](https://pure.uva.nl/ws/files/17891313/Thesis.pdf) 연구 결과를 공개해준 Kingma에게 감사합니다.
+랩 내의 스터디중 하나에서 [Kingma](http://www.dpkingma.com/)의 Thesis를 공부하고 있는데, 정리도 할겸 복습용으로 작성중인 글입니다. [Full Thesis](https://pure.uva.nl/ws/files/17891313/Thesis.pdf).
+
+연구 결과를 공개해준 Kingma에게 감사합니다.
 
 ##### contents
 1. [Introduction and Background](#introduction-and-background)
