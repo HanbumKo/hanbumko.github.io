@@ -1,6 +1,6 @@
 ---
 title: Variational Inference
-updated: 2021-01-07 00:33
+updated: 2021-01-10 18:21
 ---
 
 
@@ -107,5 +107,85 @@ p_\theta(\mathbf{y} \mid \mathbf{x}) &= Categorical(\mathbf{y} ; \mathbf{p}) \ta
 $$
 
 
+<br>
 
+### Directed Graphical Models and Neural Networks
+
+directed (probabilistic) grahpical models는 모든 변수가 directed acyclic graph로 정리되는 모델이다.
+
+$$
+\begin{align}
+p_\theta(\mathbf{x}_1, \cdots, \mathbf{x}_\mathcal{M}) = \prod_{j=1}^{\mathcal{M}} {p_\theta(\mathbf{x}_j \mid p_a(\mathbf{x}_j))} \tag{1.6} \label{eq:1_6}
+\end{align}
+$$
+
+$$p_a(\mathbf{x}_j)$$: node $$\mathbf{x}_j$$의 parent vatiable. root node일 경우는 unconditional로 쓴다.
+
+directed graphical models 혹은 Bayesian networks라고 한다.
+
+$${p_\theta(\mathbf{x}_j \mid p_a(\mathbf{x}_j))} $$는 lookup table 혹은 linear model로 parameterized 될 수 있으며 뉴럴넷은 조금 더 flexible한 방법이다.
+
+Conditional distribution을 parameterize 할 때에는 뉴럴넷이 파라미터 $$\eta$$를 생성한다
+
+$$
+\begin{align}
+\eta &= NeuralNet(p_a(\mathbf{x})) \tag{1.7} \label{eq:1_7}\\
+p_\theta(\mathbf{x} \mid p_a(\mathbf{x})) &= p_\theta(\mathbf{x} \mid \eta) \tag{1.8} \label{eq:1_8}
+\end{align}
+$$
+
+<br>
+
+### Learning in Fully Observed Models with Neural Nets
+
+#### Dataset
+$$
+\begin{align}
+\mathcal{D} = \{ \mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \cdots, \mathbf{x}^{(N)} \} \equiv \{ \mathbf{x}^{(i)} \}_{i=1}^N \equiv \mathbf{x}^{(1:N)} \tag{1.9} \label{eq:1_9}
+\end{align}
+$$
+
+-> i.i.d.
+
+#### Maximum Likelihood and Minibatch SGD
+
+probabilistic models의 가장 흔한 평가기준(criterion)은 maximum log-likelihood(ML)이다.
+
+log-likelihood criterion을 최대화 하는 것은 Kullback-Leibler divergence를 최소화 하는 것과 같다. (data와 model distribution)
+
+ML criterion을 이용해 log-probabilities의 합 혹은 평균을 최대화하는 파라미터 $$\theta$$를 찾는다.
+
+$$
+\begin{align}
+\log{p_\theta(\mathcal{D})} = \sum_{\mathbf{x} \in \mathcal{D}}\log{p_\theta(\mathbf{x})} \tag{1.10} \label{eq:1_10}
+\end{align}
+$$
+
+$$\nabla_\theta \log{p_\theta(\mathcal{D})}$$: batch gradient
+
+-> 데이터 사이즈 $$N_\mathcal{D}$$이 증가함에 따라 시간도 linear 하게 증가
+
+Stochastic Gradient Descent (SGD)
+
+-> $$\mathcal{D}$$에서 랜덤하게 미니배치 뽑아서 하는 것
+
+$$\mathcal{M} \subset \mathcal{D}, \quad size: N_\mathcal{M}$$
+
+미니배치를 이용하면 ML criterion의 불편추정량(unbiased estimator)을 얻을 수 있다.
+
+$$
+\frac{1}{N_\mathcal{D}}\log{p_\theta(\mathcal{D})} \simeq \frac{1}{N_\mathcal{M}}\log{p_\theta(\mathcal{M})} = \frac{1}{N_\mathcal{M}} \sum_{\mathbf{x} \in \mathcal{M}}{\log{p_\theta (\mathbf{x}) }} \tag{1.11} \label{eq:1_11}
+$$
+
+$$\simeq$$: unbiased estimator
+
+unbiased estimator $$\log_{\theta}{(\mathcal{M})}$$은 미분 가능하고 unbiased stochastic gradients를 얻을 수 있다.
+
+$$
+\frac{1}{N_\mathcal{D}} \nabla_\theta \log{p_\theta(\mathcal{D})} \simeq \frac{1}{N_\mathcal{M}} \nabla_\theta \log{p_\theta(\mathcal{M})} = \frac{1}{N_\mathcal{M}} \sum_{\mathbf{x} \in \mathcal{M}}\nabla_\theta{\log{p_\theta (\mathbf{x}) }} \tag{1.12} \label{eq:1_12}
+$$
+
+#### Bayesian inference
+
+Bayesian의 관점에서 ML을 maximum a posteriori(MAP) 추정으로 개선할 수 있다. 혹은 full approximate posterior distribution을 추정할 수 있다.
 
