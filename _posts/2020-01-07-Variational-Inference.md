@@ -119,7 +119,7 @@ p_\theta(\mathbf{x}_1, \cdots, \mathbf{x}_\mathcal{M}) = \prod_{j=1}^{\mathcal{M
 \end{align}
 $$
 
-$$p_a(\mathbf{x}_j)$$: node $$\mathbf{x}_j$$의 parent vatiable. root node일 경우는 unconditional로 쓴다.
+$$p_a(\mathbf{x}_j)$$: node $$\mathbf{x}_j$$의 parent variable. root node일 경우는 unconditional로 쓴다.
 
 directed graphical models 혹은 Bayesian networks라고 한다.
 
@@ -179,13 +179,116 @@ $$
 
 $$\simeq$$: unbiased estimator
 
-unbiased estimator $$\log_{\theta}{(\mathcal{M})}$$은 미분 가능하고 unbiased stochastic gradients를 얻을 수 있다.
+unbiased estimator $$\log p_{\theta}{(\mathcal{M})}$$은 미분 가능하고 unbiased stochastic gradients를 얻을 수 있다.
 
 $$
 \frac{1}{N_\mathcal{D}} \nabla_\theta \log{p_\theta(\mathcal{D})} \simeq \frac{1}{N_\mathcal{M}} \nabla_\theta \log{p_\theta(\mathcal{M})} = \frac{1}{N_\mathcal{M}} \sum_{\mathbf{x} \in \mathcal{M}}\nabla_\theta{\log{p_\theta (\mathbf{x}) }} \tag{1.12} \label{eq:1_12}
 $$
 
-#### Bayesian inference
+#### Bayesian Inference
 
 Bayesian의 관점에서 ML을 maximum a posteriori(MAP) 추정으로 개선할 수 있다. 혹은 full approximate posterior distribution을 추정할 수 있다.
+
+<br>
+
+### Learning and Inference in Deep Latent Variable Models
+
+#### Latent Variables
+
+latent variables는 보여지지 않은 variables이다. 주로 $$\mathbf{z}$$로 나타낸다.
+
+observed variable $$\mathbf{x}$$에 대해 unconditional 모델링의 경우에 directed grahpical model은 $$\mathbf{x}$$, $$\mathbf{z}$$에 관한 joint distribution $$p_\theta(\mathbf{x}, \mathbf{z})$$로 나타낼 수 있다.
+
+그리고 $$p_\theta(\mathbf{x})$$는 marginal로 나타낼 수 있다.
+
+$$
+p_\theta(\mathbf{x}) = \int{p_\theta(\mathbf{x}, \mathbf{z})}d\mathbf{z} \tag{1.13} \label{eq:1_13}
+$$
+
+(single datapoint) marginal likelihood 혹은 model evidence라고 부른다.
+
+만약 $$\mathbf{z}$$가 discrete이고 $$p_\theta(\mathbf{x} \mid \mathbf{z}) \; \sim \mathcal{N}$$이면 $$q_\phi(\mathbf{z} \mid \mathbf{x})는 mixture-of-Gaussian-distribution이다.
+
+continuous한 $$\mathbf{z}$$의 경우에는 $$p_\theta(\mathbf{x})$$가 infinite mixture라고 볼 수 있다.
+
+이러한 marginal distributions를 compound probability distributions 라고도 부른다.
+
+#### Deep Latent Variable Models
+
+latent variable model $$p_\theta(\mathbf{x}, \mathbf{z})$$를 뉴럴넷으로 parameterize한 경우를 deep latent variable model(DLVM)이라고 (사용)한다.
+
+$$p_\theta(\mathbf{x}, \mathbf{z} \mid \mathbf{y})$$ 같이 conditioned로도 표현 가능하다.
+
+DLVMs의 장점 중 하나는, marginal distribution $$p_\theta(\mathbf{x})$$가 매우 복잡해 질 수 있는데, 이 복잡한 underlying distribution $$p^\ast(\mathbf{x})$$를 잘 approximate 할 수 있는 것이다.
+
+$$
+p_\theta(\mathbf{x}, \mathbf{z}) = p_\theta(\mathbf{z}) p_\theta( \mathbf{x} \mid \mathbf{z} ) \tag{1.14} \label{eq:1_14}
+$$
+
+$$p_\theta(\mathbf{z})$$ and/or $$p_\theta(\mathbf{x} \mid \mathbf{z})$$는 정해져 있다.
+
+$$p(\mathbf{z})$$를 보통 $$\mathbf{z}$$에 대한 prior distribution이라 한다. (어떠한 observations에도 conditioned 되지 않았기 때문에)
+
+#### Example DLVM for multivariate Bernoulli data
+
+Variational Auto Encoder(VAE)에서 간단한 예제를 살펴 볼 수 있다.
+
+$$
+\begin{align}
+p(\mathbf{z}) &= \mathcal{N}(\mathbf{z} ; 0, \mathbf{I}) \tag{1.15} \label{eq:1_15} \\
+p &= DecoderNeuralNet_\theta(\mathbf{z}) \tag{1.16} \label{eq:1_16} \\
+\log {p(\mathbf{x} \mid \mathbf{z})} &= \sum_{j=1}^{D}\log {p(\mathbf{x}_j \mid \mathbf{z})} = \sum_{j=1}^{D} \log {Bernoulli(\mathbf{x}_j ; p_j)} \tag{1.17} \label{eq:1_17} \\
+&= \sum_{j=1}^{D} \mathbf{x}_j \log {p_j} + (1-\mathbf{x_j}) \log {(1-p_j)} \tag{1.18} \label{eq:1_18}
+\end{align}
+$$
+
+where $$\forall p_j \in \mathbf{p} \; : \; 0 \le p_j \le 1$$
+
+, D is dimensionality of $$\mathbf{x}$$
+, $$Bernoulli(. ; p)$$ is p.m.f. of Bernoulli distribution
+
+<br>
+
+### Intractabilities
+
+DLVMs에서 maximum likelihood 학습의 주요 어려움은 데이터의 marginal probability가 주로 intractable(다루기 어렵다) 하다는 것이다. $$p_\theta(\mathbf{x}) = \int p_\theta (\mathbf{x}, \mathbf{z})d\mathbf{z}$$가 analytic한 해 또는 추정량을 갖지 못한다.
+
+따라서 파라미터들에 대해 미분과 최적화를 하지 못한다.
+
+$$p_\theta(\mathbf{x})$$의 intractability는 posterior distribution $$p_\theta(\mathbf{z} \mid \mathbf{x})$$와 관련되어 있다.
+
+$$
+p_\theta(\mathbf{z} \mid \mathbf{x}) = \frac{p_\theta(\mathbf{x}, \mathbf{z})}{p_\theta(\mathbf{x})} \tag{1.19} \label{eq:1_19}
+$$
+
+$$p_\theta(\mathbf{x}, \mathbf{z})$$는 tractable 할 때,
+
+$$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf{x})$$도 tractable 하다.(vice-versa)
+
+마찬가지로 뉴럴넷의 파라미터에 대한 posterior $$p(\theta \mid \mathcal{D})도 정확하게 계산되기 힘들고 approximate 추정 방법이 필요하다.
+
+<br>
+
+### Research Questions and Contributions
+
+**Research Question 1:** 큰 데이터셋이 존재할때, DLVMs에서 어떻게 효과적으로 posterior 추정과 ML 추정을 할 것인지?
+
+-> chapter 2에서 *reparameterization trick* 과 함께 다룬다.* variational autoencoder*(VAE)이 뉴럴넷을 이용한 추정 모델과 뉴럴넷 이용한 generative model을 조합해서 사용한다. 이 두 네트워크의 joint optimization하는 간단한 방법을 다룬다.
+
+**Research Question 2:** VAE를 사용해서 최신의 semi-supervised classification 결과들을 개선시킬 수 있을지?
+
+-> chapter 3에서 VAE가 semi-supervised learning을 다루는 방법을 설명한다. normalizing flows가 posterior distributions을 parameterizing 하는 flexible한 방법을 제공하는데, high-dimensional latent spaces에서는 잘 안된다.
+
+**Research Question 3:** high-dimensional latent space를 잘 다루는 practical한 normalizing flow가 존재하는지?
+
+-> chapter 5에서 high-dimensional latent spaces에 대해 highly non-Gaussian posterior distributions의 추정을 하는 *inverse autoregressive flows* 를 다룬다. VAE에서도 어떻게 쓰이나 살펴본다. 
+
+**Research Question 4:** reparameterization-based gradient 추정량을 variance가 미니배치 사이즈와 반비례하게 증가하는 gradient estimator를 사용해  개선시킬 수 있는지?
+
+-> chapter 6에서 Gaussian posterior의 variational inference 효율성을 개선시키기 위한 *local reparameterization trick*을 다룬다. 이 방법은 dropout을 추가적인 (Bayesian) 시각으로 볼 수 있도록 한다.
+
+**Research Question 5:** 현재 존재하는 stochastic gradient-based 최적화 방법들을 개선 시킬 수 있는지?
+
+-> chapter 7에서 *Adam*을 소개한다.
+
 
