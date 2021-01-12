@@ -1,5 +1,5 @@
 ---
-title: Combinatorial Optimization
+title: Combinatorial Optimization-Papers
 updated: 2021-01-04 21:11
 
 
@@ -11,6 +11,7 @@ updated: 2021-01-04 21:11
 ## Paper list
 
 * [Learning Combinatorial Optimization Algorithms over Graphs](#learning-combinatorial-optimization-algorithms-over-graphs) [^1]
+* [Erdos Goes Neural: an Unsupervised Learning Framework for Combinatorial Optimization on Graphs](#erdos-goes-neural:-an-unsupervised-learning-framework-for-combinatorial-optimization-on-graphs)[^2]
 
 
 <div class="divider"></div>
@@ -267,8 +268,11 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 
 
+# Erdos Goes Neural: an Unsupervised Learning Framework for Combinatorial Optimization on Graphs
+
 
 
 
 
 [^1]: [https://arxiv.org/abs/1704.01665](https://arxiv.org/abs/1704.01665)
+[^2]: [https://arxiv.org/abs/2006.10643](https://arxiv.org/abs/2006.10643)
