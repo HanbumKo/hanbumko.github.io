@@ -301,7 +301,7 @@ Figure 1에 제안한 방법의 세 과정이 나와있다.
 2. 낮은 cost $$f(S^\ast ; G)$$의 유효한 $$S^\ast \; \sim \; \mathcal{D}$$가 존재할 확률의 최적화를 학습한다.
 3. conditional expectation 방법으로 Deterministically $$\mathcal{D}$$로부터 $$S^\ast$$를 복구한다.
 
-$$\mathcal{D}$$초기화 - $$v_i \in S$$는 확률 $$p_i$$를 갖는 베르누이 확률변수 $$x_i$$로 초기화한다.
+$$\mathcal{D}$$초기화는 $$v_i \in S$$는 확률 $$p_i$$를 갖는 베르누이 확률변수 $$x_i$$로 초기화한다.
 
 
 <div class="divider"></div>
