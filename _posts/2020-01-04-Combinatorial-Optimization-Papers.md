@@ -11,7 +11,7 @@ updated: 2021-01-04 21:11
 ## Paper list
 
 * [Learning Combinatorial Optimization Algorithms over Graphs](#learning-combinatorial-optimization-algorithms-over-graphs) [^1]
-* [Erdos Goes Neural: an Unsupervised Learning Framework for Combinatorial Optimization on Graphs](#erdos-goes-neural:-an-unsupervised-learning-framework-for-combinatorial-optimization-on-graphs)[^2]
+* [Erdos Goes Neural: an Unsupervised Learning Framework for Combinatorial Optimization on Graphs](#erdos-goes-neural-an-unsupervised-learning-framework-for-combinatorial-optimization-on-graphs)[^2]
 
 
 <div class="divider"></div>
@@ -270,6 +270,41 @@ fitted Q-iteration은 버퍼에 저장했다가 배치로 꺼내서 업데이트
 
 # Erdos Goes Neural: an Unsupervised Learning Framework for Combinatorial Optimization on Graphs
 
+* 그래프에서의 Combinatorial Optimization 문제에 대한 완전한 해를 구하는 unsupervised learning framework를 제공한다.
+* Erdos의 probabilistic method에서 sets에 대한 확률 분포를 뉴럴넷으로 표현했다.
+* maximum clique 문제, constrained min-cut 문제, local graph clustering에 적용했다.
+* unsupervised, differentiable, end-to-end로 뉴럴넷을 학습한다.
+* loss를 미분 가능하도록 바꾸는 것이 해가 존재하는 것을 보장한다.
+
+<br>
+
+## The Erdos probabilistic method for deep learning
+
+weighted graph $$G=(V,E,w)$$에서의 조합 문제를 다루고, constrained optimization 문제로 나타낸다.
+
+$$
+\min_{S  \subseteq V}  f(S;G)  \quad subject \, to \quad S \in  \Omega \tag{1} \label{eq:2_1}
+$$
+
+$$\Omega$$는 문제에 따라 원하는 속성을 가진 노드집합의 집합이다.
+
+
+### The "Erdos Goes Neural" pipeline
+
+non-differentiable한 $$\eqref{eq:2_1}$$을 다루는 대신 GNN을 이용해 해들의 분포를 취급할 수 있도록 한다.
+
+Figure 1에 제안한 방법의 세 과정이 나와있다.
+
+![figure2_1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/combinatorial_optimization/figure2_1.png?raw=true)
+
+1. GNN $$g_\theta$$를 구성하고 sets에 대한 분포 $$\mathcal{D}=g_\theta(G)$$ 분포를 얻는다.
+2. 낮은 cost $$f(S^\ast ; G)$$의 유효한 $$S^\ast \; \sim \; \mathcal{D}$$가 존재할 확률의 최적화를 학습한다.
+3. conditional expectation 방법으로 Deterministically $$\mathcal{D}$$로부터 $$S^\ast$$를 복구한다.
+
+$$\mathcal{D}$$초기화 - $$v_i \in S$$는 확률 $$p_i$$를 갖는 베르누이 확률변수 $$x_i$$로 초기화한다.
+
+
+<div class="divider"></div>
 
 
 
