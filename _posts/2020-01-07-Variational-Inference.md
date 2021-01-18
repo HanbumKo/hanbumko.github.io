@@ -390,10 +390,123 @@ KL divergence $$D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p_\theta(\mathbf{z}
 i.i.d. dataset이 주어질때 ELBO의 objective는 ELBO의 합 혹은 평균이다.
 
 $$
-\mathcal{L}_{\theta, \phi}(\mathcal{D}) = \sum_{x \in \mathcal{D}} \mathcal{L}_{\theta, \phi}(\mathbf{x})
+\mathcal{L}_{\theta, \phi}(\mathcal{D}) = \sum_{x \in \mathcal{D}} \mathcal{L}_{\theta, \phi}(\mathbf{x}) \tag{2.13} \label{eq:2_13}
 $$
 
+각 datapoint ELBO의 gradient $$\nabla_{\theta, \phi} \mathcal{L}_{\theta, \phi}(\mathbf{x})$$는 일반적으로 intractable 하다. 그러나 좋은 불편추정량 $$\tilde{\nabla}_{\theta, \phi} \mathcal{L}_{\theta, \phi}(\mathbf{x})$$이 존재하여 minibatch SGD를 할 수 있다.
 
+$$
+\begin{align}
+\nabla_{\theta} \mathcal{L}_{\theta, \phi}(\mathbf{x}) &= \nabla_{\theta} \mathbb{E}{q_\phi(\mathbf{z} \mid \mathbf{x})}[\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.14} \label{eq:2_14} \\
+&= \mathbb{E}{q_\phi(\mathbf{z} \mid \mathbf{x})}[\nabla_{\theta} (\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x}))] \tag{2.15} \label{eq:2_15} \\
+&\simeq \nabla_{\theta}( \log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x}) ) \tag{2.16} \label{eq:2_16} \\
+&= \nabla_{\theta}( \log p_\theta(\mathbf{x}, \mathbf{z})) \tag{2.17} \label{eq:2_17}
+\end{align}
+$$
+
+식 $$\eqref{eq:2_17}$$은 식 $$\eqref{eq:2_15}$$의 Monte Carlo 추정량이다. ($$\mathbf{z}$$는 $$q_\phi(\mathbf{z} \mid \mathbf{x})$$로부터 random sample 됨)
+
+variational parameter $$\phi$$에 관한 불편(unbiased) gradients는 얻기가 어렵다. (ELBO의 expectation이 $$q_\phi(\mathbf{z} \mid \mathbf{x})$$에 대한 것인데 이것이 $$\phi$$의 함수라서)
+
+$$
+\begin{align}
+\nabla_{\phi} \mathcal{L}_{\theta, \phi}(\mathbf{x}) &= \nabla_{\phi} \mathbb{E}{q_\phi(\mathbf{z} \mid \mathbf{x})}[\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.18} \label{eq:2_18} \\
+&\neq \mathbb{E}{q_\phi(\mathbf{z} \mid \mathbf{x})}[\nabla_{\phi} (\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x}))] \tag{2.19} \label{eq:2_19}
+\end{align}
+$$
+
+latent variable이 continuous한 경우 불편추정량 계산을 위해 reparameterization trick을 사용할 수 있다. (discrete한 경우는 앞으로 나올 [Score function estimator](#score-function-estimator)에서 설명한다.)
+
+<br>
+
+### Reparameterization trick
+
+![figure2_3](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/figure2_3.png?raw=true)
+
+![algorithm1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/algorithm1.png?raw=true)
+
+#### Change of Variables
+
+random variable $$\mathbf{z} \; \sim \; q_\phi(\mathbf{z} \mid \mathbf{x})$$를 다른 random variable $$\epsilon$$를 사용하여 미분가능하게 변환을 할 수 있다.
+
+$$
+\mathbf{z} = g(\epsilon, \phi, \mathbf{x}) \tag{2.20} \label{eq:2_20}
+$$
+
+random variable $$\epsilon$$은 $$\mathbf{x}$$ 또는 $$\phi$$에 대해 독립이다.
+
+#### Gradient of Expectation under change of variable
+
+이렇게 변환을 하게 되면 expectation을 $$\epsilon$$에 대해 다시 쓸 수 있다.
+
+$$
+\mathbb{E}_{q_\phi(\mathbf{z} \mid \mathbf{x})}[f(\mathbf{z})] = \mathbb{E}_{p(\epsilon)}[f(\mathbf{z})] \tag{2.21} \label{eq:2_21}
+$$
+
+where $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$
+
+gradient는
+
+$$
+\begin{align}
+\nabla_\phi \mathbb{E}_{q_\phi(\mathbf{z} \mid \mathbf{x})}[f(\mathbf{z})] &= \nabla_\phi \mathbb{E}_{p(\epsilon)}[f(\mathbf{z})] \tag{2.22} \label{eq:2_22} \\
+&= \mathbb{E}_{p(\epsilon)}[f(\nabla_\phi \mathbf{z})] \tag{2.23} \label{eq:2_23} \\
+&\simeq \nabla_\phi f(\mathbf{z}) \tag{2.24} \label{eq:2_24}
+\end{align}
+$$
+
+where $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$ with random noise sample $$\epsilion \; \sim \; p(\epsilon)$$
+
+#### Gradient of ELBO
+
+위에서 말한 reparameterization trick을 사용해서 ELBO를 다시 써보면
+
+$$
+\begin{align}
+\mathcal{L}_{\theta, \phi}(\mathbf{x}) &= \mathbb{E}_{q_\phi(\mathbf{z} \mid \mathbf{x})} [\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.25} \label{eq:2_25} \\
+&= \mathbb{E}_{p(\epsilon)} [\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.26} \label{eq:2_26}
+\end{align}
+$$
+
+where $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$
+
+Monte Carlo 추정량 $$\tilde{\mathcal{L}}_{\theta, \phi}(\mathbf{x})$$도 다시 쓸 수 있다.
+
+$$
+\begin{align}
+\epsilon \; &\sim \; p(\epsilon) \tag{2.27} \label{eq:2_27} \\
+\mathbf{z} &= g(\epsilon, \phi, \mathbf{x}) \tag{2.28} \label{eq:2_28} \\
+\tilde{\mathcal{L}}_{\theta, \phi}(\mathbf{x}) &= \log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x}) \tag{2.29} \label{eq:2_29}
+\end{align}
+$$
+
+##### Unbiasedness
+
+ELBO의 gradient 추정량은 불편추정량이고 noise $$\epsilon \; &\sim \; p(\epsilon)$$가 평균으로 분포돼있다. single datapoint ELBO gradient와 똑같이 나온다.
+
+$$
+\begin{align}
+\mathbb{E}_{p(\epsilon)}[ \nabla_{\theta, \phi} \tilde{\mathcal{L}}_{\theta, \phi}(\mathbf{x};\epsilon)] &= \mathbb{E}_{p(\epsilon)} [\nabla_{\theta, \phi} (\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x}))] \tag{2.30} \label{eq:2_30} \\
+&= \nabla_{\theta, \phi} \mathbb{E}_{p(\epsilon)} [\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.31} \label{eq:2_31} \\
+&= \nabla_{\theta, \phi} \mathcal{L}_{\theta, \phi}(\mathbf{x})
+\end{align} \tag{2.32} \label{eq:2_32}
+$$
+
+#### Computation of $$\log q_\phi(\mathbf{z} \mid \mathbf{z})$$
+
+ELBO의 추정량 계산은 $$\log q_\phi(\mathbf{z} \mid \mathbf{z})$$의 density 계산이 필요하다.(given a value of $$\mathbf{x}$$ and given a value of $$\mathbf{z}$$ 또는 마찬가지로 $$\epsilon$$)
+
+이 log-density 계산은 $$g()$$의 선택에 따라 간단해 질 수 있다.
+
+일반적으로 $$p(\epsilon)$$의 density는 알고 있다.
+
+$$g(.)$$가 invertible 함수이면 $$\epsilon$$과 $$\mathbf{z}$$의 density들은 다음과 같이 관련되어 있다.
+
+$$
+\log q_\phi(\mathbf{z} \mid \mathbf{z}) = \log p(\epsilon) - \log d_\phi(\mathbf{x}, \epsilon) \tag{2.33} \label{eq:2_33}
+$$
+
+$$\log d_\phi(\mathbf{x}, \epsilon)$$은 Jacobian matrix$$(\partial \mathbf{z}  / \partial \epsilon)$$의 determinant의 절댓값이다.
 
 
 
