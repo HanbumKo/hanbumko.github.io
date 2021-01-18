@@ -13,7 +13,7 @@ updated: 2021-01-10 18:21
 
 ##### contents
 1. [Introduction and Background](#introduction-and-background)
-2. Variational Autoencoders
+2. [Variational Autoencoders](#encoder-or-approximate-posterior)
 3. Semi-Supervised Learning
 4. Deeper Generative Models
 5. Inverse Autoregressive Flow
@@ -293,4 +293,110 @@ $$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf
 **Research Question 5:** 현재 존재하는 stochastic gradient-based 최적화 방법들을 개선 시킬 수 있는지?
 
 -> chapter 7에서 *Adam*을 소개한다.
+
+
+<div class="divider"></div>
+
+
+## Introduction and Background
+
+### Encoder or Approximate Posterior
+
+$$p_\theta(\mathbf{x}, \mathbf{z})$$를 latent-variable 모델이라 하자
+
+DLVMs의 posterior 추론과 학습에서 intractable한 문제를 tractable로 하기 위해 parametric inference model $$q_\phi(\mathbf{z} \mid \mathbf{x})$$를 정의한다. $$q_\phi(\mathbf{z} \mid \mathbf{x})$$를 encoder 라고 한다. $$\phi$$는 inference model의 파라미터이고 *variational parameters*라고도 한다.
+
+$$
+q_\phi(\mathbf{z} \mid \mathbf{x}) \approx p_\theta(\mathbf{z} \mid \mathbf{x}) \tag{2.1} \label{eq:2_1}
+$$
+
+DLVM 처럼 inference 모델은 어떠한 directed graphical model이 될 수 있다.
+
+$$
+q_\phi(\mathbf{z} \mid \mathbf{x}) = q_\phi(\mathbf{z}_1, \cdots, \mathbf{z}_M \mid \mathbf{x}) = \prod_{j=1}^M q_\phi(\mathbf{z}_j \mid Pa(\mathbf{z}_j), \mathbf{x}) \tag{2.2} \label{eq:2_2}
+$$
+
+$$q_\phi(\mathbf{z} \mid \mathbf{x})$$는 DNN으로 나타낼 수 있다.
+
+$$
+\begin{align}
+(\mu, \, log\sigma) &= EncoderNeuralNet_\phi(\mathbf{x}) \tag{2.3} \label{eq:2_3} \\
+q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\mathbf{z} ; \mu, diag(\sigma)) \tag{2.4} \label{eq:2_4}
+\end{align}
+$$
+
+모든 데이터에 같은 모델을 쓰는 것을 *amortized variational inference*라고 한다.
+
+<br>
+
+### Evidence Lower Bound (ELBO)
+
+variational autoencoder의 최적화의 목표(objective)는 evidence lower bound (ELBO)이다. *variational lower bound*라고도 한다.
+
+![figure2_1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/figure2_1.png?raw=true)
+
+variational parameter $$\phi$$를 포함하는 inference model $$q_\phi(\mathbf{z} \mid \mathbf{x})$$에서,
+
+\tag{2.7} \label{eq:2_7}
+$$
+\begin{align}
+\log p_\theta(\mathbf{x}) &= \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log p_\theta(\mathbf{x})] \tag{2.5} \label{eq:2_5} \\
+&= \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{p_\theta(\mathbf{x}, \mathbf{z})}{p_\theta(\mathbf{z} \mid \mathbf{x})} ]] \tag{2.6} \label{eq:2_6} \\
+&= \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z} \mid \mathbf{x})} \frac{q_\phi(\mathbf{z} \mid \mathbf{x})}{p_\theta(\mathbf{z} \mid \mathbf{x})} ]] \tag{2.7} \label{eq:2_7} \\
+&= \underbrace{ \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z} \mid \mathbf{x})}]] }_{ \substack{ \mathcal{L}_{\theta,\phi}( \mathbf{x}) \\  \text{(ELBO)}}} + \underbrace{ \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{q_\phi(\mathbf{z} \mid \mathbf{x})}{p_\theta(\mathbf{z} \mid \mathbf{x})}]] }_{ D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \, \| \, p_\theta(\mathbf{z} \mid \mathbf{x}))} \tag{2.8} \label{eq:2_8}
+\end{align}
+$$
+
+$$
+D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \, \| \, p_\theta(\mathbf{z} \mid \mathbf{x})) \geq 0 \tag{2.9} \label{eq:2_9}
+$$
+
+-> true posterior $$p_\theta( \mathbf{z} \mid \mathbf{x} )$$와 똑같으면 0을 갖는다. 분포가 얼마나 다른지 나타낸다.
+
+$$\eqref{eq:2_8}$$의 첫번째 항은 variational lower bound, evidence lower bound (ELBO) 이다.
+
+$$
+\mathcal{L}_{\theta, \phi}(\mathbf{x}) = \mathbb{E}_{q_\phi(\mathbf{z}\mid\mathbf{x})}[\log p_\theta(\mathbf{x}, \mathbf{z}) - \log q_\phi(\mathbf{z} \mid \mathbf{x})] \tag{2.10} \label{eq:2_10}
+$$
+
+KL divergence가 음수가 아니기 때문에 ELBO는 데이터의 log-likelihood의 lower bound이다.
+
+$$
+\begin{align}
+\mathcal{L}_{\theta, \phi}(\mathbf{x}) &= \log p_\theta(\mathbf{x}) - D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p_\theta(\mathbf{z} \mid \mathbf{x})) \tag{2.11} \label{eq:2_11} \\
+&\leq \log p_\theta(\mathbf{x}) \tag{2.12} \label{eq:2_12}
+\end{align}
+$$
+
+KL divergence $$D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p_\theta(\mathbf{z} \mid \mathbf{x}))$$는 두 가지 '거리'를 나타낸다.
+
+1. approximate posterior와 true posterior의 KL divergence (by definition)
+2. ELBO $$\mathcal{L}_{\theta, \phi}(\mathbf{x})$$와 marginal likelihood $$\log p_\theta(\mathbf{x})$$의 차이 -> *tightness*라고도 한다. 더 잘 추론할수록 차이가 줄어든다.
+
+![figure2_2](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/figure2_2.png?raw=true)
+
+#### A Double-Edged Sword
+
+식 $$\eqref{eq:2_11}$$에서, ELBO $$\mathcal{L}_{\theta, \phi}(\mathbf{x})$$의 최대화는 두 가지를 동시에 최적화 한다고 볼 수 있다.
+
+1. approximately maximize the marginal likelihood $$p_\theta(\mathbf{x})$$ -> generative 모델이 최적화
+2. minimize KL divergence -> $$q_\phi(\mathbf{z} \mid \mathbf{x})$$가 최적화
+
+<br>
+
+### Stochastic Gradient-Based Optimization of the ELBO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
