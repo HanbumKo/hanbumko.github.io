@@ -13,7 +13,7 @@ updated: 2021-01-10 18:21
 
 ##### contents
 1. [Introduction and Background](#introduction-and-background)
-2. [Variational Autoencoders](#encoder-or-approximate-posterior)
+2. [Variational Autoencoders](#variational-autoencoders)
 3. Semi-Supervised Learning
 4. Deeper Generative Models
 5. Inverse Autoregressive Flow
@@ -298,7 +298,7 @@ $$p_\theta(\mathbf{x})$$가 tractable 하면 $$p_\theta( \mathbf{z} \mid \mathbf
 <div class="divider"></div>
 
 
-## Introduction and Background
+## Variational Autoencoders
 
 ### Encoder or Approximate Posterior
 
@@ -321,7 +321,7 @@ $$q_\phi(\mathbf{z} \mid \mathbf{x})$$는 DNN으로 나타낼 수 있다.
 $$
 \begin{align}
 (\mu, \, log\sigma) &= EncoderNeuralNet_\phi(\mathbf{x}) \tag{2.3} \label{eq:2_3} \\
-q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\mathbf{z} ; \mu, diag(\sigma)) \tag{2.4} \label{eq:2_4}
+q_\phi(\mathbf{z} \mid \mathbf{x}) &= \mathcal{N}(\mathbf{z} ; \mu, diag(\sigma)) \tag{2.4} \label{eq:2_4}
 \end{align}
 $$
 
@@ -337,7 +337,6 @@ variational autoencoder의 최적화의 목표(objective)는 evidence lower boun
 
 variational parameter $$\phi$$를 포함하는 inference model $$q_\phi(\mathbf{z} \mid \mathbf{x})$$에서,
 
-\tag{2.7} \label{eq:2_7}
 $$
 \begin{align}
 \log p_\theta(\mathbf{x}) &= \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log p_\theta(\mathbf{x})] \tag{2.5} \label{eq:2_5} \\
@@ -346,6 +345,8 @@ $$
 &= \underbrace{ \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z} \mid \mathbf{x})}]] }_{ \substack{ \mathcal{L}_{\theta,\phi}( \mathbf{x}) \\  \text{(ELBO)}}} + \underbrace{ \mathbb{E}_{ q_\phi(\mathbf{z} \mid \mathbf{x}) }[\log [ \frac{q_\phi(\mathbf{z} \mid \mathbf{x})}{p_\theta(\mathbf{z} \mid \mathbf{x})}]] }_{ D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \, \| \, p_\theta(\mathbf{z} \mid \mathbf{x}))} \tag{2.8} \label{eq:2_8}
 \end{align}
 $$
+
+으로 식을 변형할 수 있다. 두번째 항은
 
 $$
 D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \, \| \, p_\theta(\mathbf{z} \mid \mathbf{x})) \geq 0 \tag{2.9} \label{eq:2_9}
@@ -386,7 +387,11 @@ KL divergence $$D_{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p_\theta(\mathbf{z}
 
 ### Stochastic Gradient-Based Optimization of the ELBO
 
+i.i.d. dataset이 주어질때 ELBO의 objective는 ELBO의 합 혹은 평균이다.
 
+$$
+\mathcal{L}_{\theta, \phi}(\mathcal{D}) = \sum_{x \in \mathcal{D}} \mathcal{L}_{\theta, \phi}(\mathbf{x})
+$$
 
 
 
