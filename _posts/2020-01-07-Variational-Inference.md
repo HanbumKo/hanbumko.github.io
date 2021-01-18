@@ -1,6 +1,6 @@
 ---
 title: Variational Inference
-updated: 2021-01-10 18:21
+updated: 2021-01-18 19:01
 ---
 
 
@@ -508,6 +508,75 @@ $$
 
 $$\log d_\phi(\mathbf{x}, \epsilon)$$은 Jacobian matrix$$(\partial \mathbf{z}  / \partial \epsilon)$$의 determinant의 절댓값이다.
 
+$$
+\log d_\phi(\mathbf{x}, \epsilon) = \log \left\vert \det(\frac{\partial \mathbf{z}}{\partial \epsilon}) \right\vert \tag{2.34} \label{eq:2_34}
+$$
+
+이것을 $$\epsilon$$에서 $$\mathbf{z}$$ 변화의 log-determinant라고 부른다.
+
+$$
+\frac{\partial \mathbf{z}}{\partial \epsilon} = \frac{\partial (z_1, \cdots, z_k)}{\partial (\epsilon_1, \cdots, \epsilon_k)} = 
+  \begin{pmatrix}
+  \frac{\partial z_1}{\partial \epsilon_1} & \cdots & \frac{\partial z_1}{\partial \epsilon_k} \\
+  \vdots  & \ddots & \vdots  \\
+  \frac{\partial z_k}{\partial \epsilon_1} & \cdots & \frac{\partial z_k}{\partial \epsilon_k} \tag{2.35} \label{eq:2_35}
+  \end{pmatrix}
+$$
+
+나중에 이 $$g()$$를 $$\log d_\phi(\mathbf{x}, \epsilon)$$의 계산이 쉬우면서 flexible한 inference 모델 $$q_\phi(\mathbf{z} \mid \mathbf{x})$$를 갖도록 설정해 줄 것이다.
+
+<br>
+
+### Factorized Gaussian Posteriors
+
+일반적으로 간단한 factorized Gaussian encoder를 선택한다.
+
+$$q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\mathbf{z} ; \mu, \text{diag}(\sigma^2))$$ :
+
+$$
+\begin{align}
+(\mu, \log \sigma) &= EncoderNeuralNet_\phi(\mathbf{x}) \tag{2.36} \label{eq:2_36} \\
+q_\phi(\mathbf{z} \mid \mathbf{x}) &= \prod_i q_\phi(\mathbf{z}_i \mid \mathbf{x}) = \prod_i\mathcal{N}(\mathbf{z}_i ; \mu_i ; \sigma_i^2) \tag{2.37} \label{eq:2_37}
+\end{align}
+$$
+
+where $$\mathcal{N}(\mathbf{z}_i ; \mu_i ; \sigma_i^2) $$ is p.d.f of univariate Gaussian distribution.
+
+reparameterization 후에 다시 쓸 수 있다.
+
+$$
+\begin{align}
+\epsilon \; &\sim \; \mathcal{N}(0, \mathbf{I}) \tag{2.38} \label{eq:2_38} \\
+(\mu, \log \sigma) &= EncoderNeuralNet_\phi(\mathbf{x}) \tag{2.39} \label{eq:2_39} \\
+\mathbf{z} &= \mu + \sigma \odot \epsilon \tag{2.40} \label{eq:2_40}
+\end{align}
+$$
+
+where $$\odot$$ is element-wise product
+
+Jacobian은 
+$$
+\frac{\partial \mathbf{z}}{\partial \epsilon} = \text{diag}(\sigma) \tag{2.41} \label{eq:2_41}
+$$
+
+이다.
+
+diag는 diagonal matrix이다. diagonal matrix의 determinant는 diagonal들의 곱이므로 Jacobian의 log determinant는 다음과 같이 계산된다.
+
+$$
+\log d_\phi(\mathbf{x}, \epsilon) = \log \left\vert \det(\frac{\partial \mathbf{z}}{\partial \epsilon}) \right\vert = \sum_i \log \sigma_i \tag{2.42} \label{eq:2_42}
+$$
+
+그리고 posterior density는
+
+$$
+\begin{align}
+\log q_\phi(\mathbf{z} \mid \mathbf{x}) &= \log p(\epsilon) - \log d_\phi(\mathbf{x}, \epsilon) \tag{2.43} \label{eq:2_43} \\
+&= \sum_i \log \mathcal{N}(\epsilon_i ; 0,1) - \log \sigma_i \tag{2.44} \label{eq:2_44}
+\end{align}
+$$
+
+이다. when $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$
 
 
 
