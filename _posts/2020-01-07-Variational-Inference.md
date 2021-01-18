@@ -13,7 +13,7 @@ updated: 2021-01-18 19:01
 
 ##### contents
 1. [Introduction and Background](#introduction-and-background)
-2. [Variational Autoencoders](#variational-autoencoders)
+2. [Variational Autoencoders - On progress](#variational-autoencoders)
 3. Semi-Supervised Learning
 4. Deeper Generative Models
 5. Inverse Autoregressive Flow
@@ -455,7 +455,7 @@ $$
 \end{align}
 $$
 
-where $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$ with random noise sample $$\epsilion \; \sim \; p(\epsilon)$$
+where $$\mathbf{z} = g(\epsilon, \phi, \mathbf{x})$$ with random noise sample $$\epsilon \; \sim \; p(\epsilon)$$
 
 #### Gradient of ELBO
 
@@ -482,7 +482,7 @@ $$
 
 ##### Unbiasedness
 
-ELBO의 gradient 추정량은 불편추정량이고 noise $$\epsilon \; &\sim \; p(\epsilon)$$가 평균으로 분포돼있다. single datapoint ELBO gradient와 똑같이 나온다.
+ELBO의 gradient 추정량은 불편추정량이고 noise $$\epsilon \; \sim \; p(\epsilon)$$가 평균으로 분포돼있다. single datapoint ELBO gradient와 똑같이 나온다.
 
 $$
 \begin{align}
