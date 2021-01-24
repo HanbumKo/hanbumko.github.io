@@ -100,8 +100,32 @@ $$
 
 또다른 방법인 Normalizing Flow (NF)의 일반적인 아이디어는 random한 변수로 시작하여 알려져있고 계산이 쉬운 분포와 같이 시작하고, invertible parameterized transformations $$f_t$$를 연쇄적으로 적용하는 식이다. 그러면 마지막 iterate의 $$\mathbf{z}_T$$는 좀 더 flexible한 분포를 갖는다.
 
+$$
+\begin{align}
+&\epsilon_0  \sim  p(\epsilon) \tag{5.10} \label{eq:5_10} \\
+&\text{for t = 1 ... T:} \tag{5.11} \label{eq:5_11} \\
+&\; \;  \epsilon_t = f_t(\epsilon_{t-1}, \mathbf{x}) \tag{5.12} \label{eq:5_12} \\
+&\mathbf{z} = \epsilon_t \tag{5.13} \label{eq:5_13}
+\end{align}
+$$
 
+이 transformation의 Jacobian은 다음과 같이 인수분해 된다.
 
+$$
+\frac{d\mathbf{z}}{d\epsilon_0} =  \prod_{t=1}^T \frac{d\epsilon_t}{d\epsilon_{t-1}} \tag{5.14} \label{eq:5_14}
+$$
 
+따라서 determinant 또한 인수분해 된다.
 
+$$
+\log \left\lvert \det \big( \frac{d\mathbf{z}}{d\epsilon_0} \big) \right\rvert =  \sum_{t=1}^T \log \left\lvert \det \big( \frac{d\epsilon_t}{d\epsilon_{t-1}} \big) \right\rvert \tag{5.15} \label{eq:5_15}
+$$
+
+transformation $$f_t$$의 Jacobian의 determinant가 계산될 수 있으면 $$z$$의 p.d.f.도 구할 수 있다.
+
+$$
+\log q_\phi (\mathbf{z} \vert \mathbf{x}) = \log p(\epsilon_0) - \sum_{t=1}^T \log \left\lvert \det \big( \frac{d\epsilon_t}{d\epsilon_{t-1}} \big) \right\rvert \tag{5.16} \label{eq:5_16}
+$$
+
+<div class="divider"></div>
 
