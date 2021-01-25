@@ -1,6 +1,6 @@
 ---
 title: Inverse Autoregressive Flow
-updated: 2021-01-24 17:42
+updated: 2021-01-25 17:49
 ---
 
 ([Variational Inference](https://hanbumko.github.io/Variational-Inference) 챕터5입니다.)
@@ -128,4 +128,120 @@ $$
 $$
 
 <div class="divider"></div>
+
+### 5.3. Inverse Autoregressive Transformations
+
+$$\mathbf{y}$$를 MADE나 PixelCNN처럼 고차원 공간을 다루는 normalizing flows에 의해 나온 변수라 하자. $$\mathbf{y} = \lbrace \mathcal{y}_i \rbrace_{i=1}^D$$ (원소에 정해진 순서가 존재)
+
+$$\lbrack \mu(\mathbf{y}), \sigma(\mathbf{y}) \rbrack$$는 $$\mathbf{y}$$에서 $$\mu, \sigma$$벡터로 가는 함수를 나타내기로 한다.
+
+autoregressive 구조에 의해 위 함수의 Jacobian은 diagonal이 0인 triangular 행렬이다.
+$$\partial \lbrack \mu_i, \sigma_i \rbrack  / \partial \mathbf{y}_j = [0, 0] \; \text{for} \; j \geq i$$
+
+$$\lbrack \mu(\mathbf{y}_{1:i-1}), \sigma(\mathbf{y}_{1:i-1}) \rbrack$$은 $$\mathbf{y}$$에서 이전 원소들의 함수의 mean과 std의 추정치이다.
+
+위와 같은 모델은 noise vector $$\epsilon \; \sim \; \mathcal{N}(0, \mathbf{I})$$ 에서 벡터 $$\mathbf{y}$$로의 sequential transformation이다.
+
+$$
+\begin{align}
+\mathbf{y} : \mathcal{y}_0 &= \mu_0 + \sigma_0 \odot \epsilon_0 \\
+\mathcal{y}_i &= \mu_i(\mathbf{y}_{1:i-1}) + \sigma_i(\mathbf{y}_{1:i-1}) \cdot \epsilon_i
+\end{align}
+$$
+
+모든 $$i$$에 대해 $$\sigma_i > 0$$ 이면 sampling은 일대일 transformation이고, inverted 될 수 있다.
+
+$$
+\epsilon_i = \frac{\mathcal{y}_i - \mu_i(\mathbf{y}_{1:i-1})}{\sigma_i(\mathbf{y}_{1:i-1})} \tag{5.18} \label{eq:5_18}
+$$
+
+이 역변환(inverse transformation)은 parallelized 될 수 있고 (autoregressive autoencoder의 경우), $$\epsilon$$의 각 원소 $$\epsilon_i$$가 서로 독립적이다. (do not depend on each other.) 벡터로 표현하면 다음과 같이 표현 가능하고,
+
+$$
+\epsilon = (\mathbf{y}-\mu(\mathbf{y})) / \sigma(\mathbf{y}) \tag{5.19} \label{eq:5_19}
+$$
+
+빼기와 나누기는 element-wise 이다.
+
+이 inverse autoregressive 연산은 간단한 Jacobian determinant를 갖는다. 
+$$\partial \lbrack \mu_i, \sigma_i \rbrack  / \partial \mathbf{y}_j = [0, 0] \; \text{for} \; j \geq i$$
+
+결과적으로 변환은, lower triangular Jacobian $$(\partial \epsilon_i / \partial \mathcal{y}_j = 0 \; \text{for} \; j>i)$$이 간단한 diagonal을 갖는다.
+$$(\partial \epsilon_i / \partial \mathcal{y}_i = \frac{1}{\sigma_i})$$
+
+따라서 log-determinant는
+
+$$
+\log \det \lvert \frac{d\epsilon}{d\mathbf{y}} \rvert = \sum_{i=1}^D - \log \sigma_i(\mathbf{y}) \tag{5.20} \label{eq:5_20}
+$$
+
+이다.
+
+model flexibility의 조합, dimension에 관한 parallelizability, 간단한 log-determinant가 고차원에 대한 normalizing flow를 다룰수 있게 한다.
+
+이 이후로는 조금 다르지만 똑같은 변환을 사용한다.
+
+$$
+\begin{align}
+\epsilon = \sigma(\mathbf{y})\odot\mathbf{y} + \mu(\mathbf{y}) \tag{5.21} \label{eq:5_21} \\
+\log \det \lvert \frac{d\epsilon}{d\mathbf{y}} \rvert = \sum_{i=1}^D  \log \sigma_i(\mathbf{y}) \tag{5.22} \label{eq:5_22}
+\end{align}
+$$
+
+<div class="divider"></div>
+
+### 5.4. Inverse Autoregressive Flow (IAF)
+
+첫번째 encoder NN의 output $$\mu_0, \sigma_0$$(더하여 추가적인 output $$\mathbf{h}$$도)는 뒤의 모델들에 순차적으로 사용된다. 변환들은 factorized Gaussian $$q_\phi(\mathbf{z}_0 \vert \mathbf{x}) = \mathcal{N}(0, \text{diag}(\sigma^2))$$으로 초기화 된다.
+
+$$
+\begin{align}
+\epsilon_0 \; &\sim \; \mathcal{N}(0, \mathbf{I}) \tag{5.23} \label{eq:5_23} \\
+(\mu_0, \log \sigma_0, \mathbf{h}) &= \text{EncoderNeuralNet}(\mathbf{x};\theta) \tag{5.24} \label{eq:5_24} \\
+\mathbf{z}_0 &= \mu_0 + \sigma_0 \odot \epsilon_0 \tag{5.25} \label{eq:5_25}
+\end{align}
+$$
+
+IAF는 다음의 변환들의 연속이다.
+
+$$
+\begin{align}
+(\mu_t, \sigma_t) &= \text{AutoregressiveNeuralNet}_t(\epsilon_{t-1}, \mathbf{h} ; \theta) \tag{5.26} \label{eq:5_26} \\
+\epsilon_t &= \mu_t + \sigma_t \odot \epsilon_{t-1} \tag{5.27} \label{eq:5_27}
+\end{align}
+$$
+
+![algorithm5](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/algorithm5.png?raw=true)
+
+마지막 iterate에서 식$$\eqref{eq:5_16}$$을 이용해 density를 구할 수 있다.
+
+$$
+\begin{align}
+\mathbf{z} &\equiv \epsilon_T \tag{5.28} \label{eq:5_28}\\
+\log q(\mathbf{z} \vert \mathbf{x}) &= -\sum_{i=1}^D (\frac{1}{2}\epsilon_i^2 + \frac{1}{2}\log(2\pi) + \sum_{t=0}^T \log \sigma_{t,i}) \tag{5.29} \label{eq:5_29}
+\end{align}
+$$
+
+![figure5_1](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/figure5_1.png?raw=true)
+
+LSTM처럼 두 개의 unconstrained 실수 벡터 $$(\mathbf{m}_t, \mathbf{s}_t)$$를 이용할 수도 있다.
+
+$$
+\begin{align}
+(\mathbf{m}_t, \mathbf{s}_t) &= \text{AutoregressiveNeuralNet}_t(\epsilon_{t-1}, \mathbf{h};\theta) \tag{5.30} \label{eq:5_30} \\
+
+\sigma_t &= \text{sigmoid}(\mathbf{s}_t) \tag{5.31} \label{eq:5_31} \\
+
+\epsilon_t &= \sigma_t \odot \epsilon_{t-1} + (1-\sigma_t) \odot \mathbf{m}_t \tag{5.32} \label{eq:5_32}
+\end{align}
+$$
+
+-> Algorithm 5에 나와 있다.
+
+![figure5_2](https://github.com/HanbumKo/HanbumKo.github.io/blob/master/_posts_imgs/variational_inference/figure5_2.png?raw=true)
+
+$$\mathbf{s}_t$$가 충분히 positive한 값 (+1 혹은 +2)가 나오도록 초기화 하는것이 좋다고 알려져 있다.
+
+<div class="divider"></div>
+
 
